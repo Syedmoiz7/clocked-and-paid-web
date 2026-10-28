@@ -21,7 +21,7 @@ import type { Shift } from "@/types";
 import { ManualTimesForm, newShift } from "./ManualTimesForm";
 import { Calculator } from "./Calculator";
 import { TodayPlan } from "./TodayPlan";
-import { ReminderHost, Reminders } from "./Reminders";
+import { Reminders } from "./Reminders";
 import { ShiftClock, ShiftProgress, AdditionalShifts } from "./ShiftCards";
 import { TodaySummary } from "./TodaySummary";
 import { Recovery } from "./Recovery";
@@ -202,7 +202,6 @@ export function Tracker() {
         </aside>
       )}
       {data.orphanedShift && <Recovery />}
-      <ReminderHost now={now} />
       <ShiftClock now={now} begin={begin} requestFinish={requestFinish} />
       <ShiftProgress now={now} />
       <AdditionalShifts now={now} requestFinish={requestFinish} />

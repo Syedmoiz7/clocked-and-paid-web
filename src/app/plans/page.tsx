@@ -5,12 +5,24 @@ import { Check, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
 import { setPremiumPreview } from "@/store/appSlice";
+import { useEffect, useState } from "react";
 export default function Plans() {
   const data = useApp(),
     { commit, busy } = useWorkspace(),
     router = useRouter();
+  const [returnTo, setReturnTo] = useState("/tracker");
+  useEffect(() => {
+    const target = new URLSearchParams(window.location.search).get("returnTo");
+    setReturnTo(
+      target === "history"
+        ? "/history"
+        : target === "pay"
+          ? "/pay"
+          : "/tracker",
+    );
+  }, []);
   const choose = async (premium: boolean) => {
-    if (await commit(setPremiumPreview(premium))) router.push("/tracker");
+    if (await commit(setPremiumPreview(premium))) router.push(returnTo);
   };
   return (
     <AppShell>
@@ -20,7 +32,15 @@ export default function Plans() {
           <h1>Free & Premium</h1>
           <p>Useful from day one. More room to grow when you need it.</p>
         </div>
-        <Link href="/tracker">Back to Tracker →</Link>
+        <Link href={returnTo}>
+          Back to{" "}
+          {returnTo === "/history"
+            ? "History"
+            : returnTo === "/pay"
+              ? "Pay"
+              : "Tracker"}{" "}
+          →
+        </Link>
       </div>
       <p>
         Current plan:{" "}

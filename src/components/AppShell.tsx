@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useApp, useWorkspace } from "./WorkspaceProvider";
 import { setPayVisible } from "@/store/appSlice";
+import { GlobalReminderHost } from "@/features/tracker/components/Reminders";
 import type { ReactNode, CSSProperties } from "react";
 
 const links = [
@@ -44,7 +45,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Link>
           <nav aria-label="Main navigation">
             {links.map(({ href, label, icon: Icon }) =>
-              href === "/tracker" ? (
+              ["/tracker", "/history", "/pay"].includes(href) ? (
                 <Link
                   key={href}
                   className={path === href ? "active" : ""}
@@ -75,7 +76,16 @@ export function AppShell({ children }: { children: ReactNode }) {
             >
               {data.payVisible ? <Eye size={19} /> : <EyeOff size={19} />}
             </button>
-            <Link className="plan-link" href="/plans">
+            <Link
+              className="plan-link"
+              href={
+                path === "/history"
+                  ? "/plans?returnTo=history"
+                  : path === "/pay"
+                    ? "/plans?returnTo=pay"
+                    : "/plans"
+              }
+            >
               <Sparkles size={16} />
               {data.isPremium ? "Premium preview" : "See plans"}
             </Link>
@@ -83,6 +93,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
       <main id="main" className="page">
+        <GlobalReminderHost />
         {children}
       </main>
       <footer className="site-footer">

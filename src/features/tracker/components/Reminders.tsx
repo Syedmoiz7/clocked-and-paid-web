@@ -113,6 +113,25 @@ export function ReminderHost({ now }: { now: number }) {
     </aside>
   );
 }
+
+export function GlobalReminderHost() {
+  const data = useApp();
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!data.activeShift) return;
+    const tick = () => setNow(Date.now()),
+      timer = setInterval(tick, 1000);
+    tick();
+    window.addEventListener("focus", tick);
+    document.addEventListener("visibilitychange", tick);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener("focus", tick);
+      document.removeEventListener("visibilitychange", tick);
+    };
+  }, [data.activeShift?.id]);
+  return <ReminderHost now={now} />;
+}
 export function Reminders() {
   const data = useApp(),
     { commit, busy, notify } = useWorkspace(),

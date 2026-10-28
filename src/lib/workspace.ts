@@ -7,7 +7,8 @@ interface WorkspaceDatabase extends DBSchema {
   workspace: { key: string; value: Snapshot };
 }
 export type WorkspaceAction = Parameters<typeof appReducer>[1];
-export type WorkspaceCommand = WorkspaceAction | ((state: AppState) => WorkspaceAction);
+export type WorkspaceCommand =
+  WorkspaceAction | ((state: AppState) => WorkspaceAction);
 
 export const workspaceRepository = {
   async database() {
@@ -61,7 +62,8 @@ export const workspaceRepository = {
         );
       }
       const previous = before?.state ?? fallback;
-      const action = typeof command === "function" ? command(previous) : command;
+      const action =
+        typeof command === "function" ? command(previous) : command;
       const state = appReducer(previous, action);
       if (state === previous && before) {
         await tx.done;

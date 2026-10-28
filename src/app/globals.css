@@ -839,3 +839,851 @@ dialog > header button {
   color: var(--text);
   min-height: 100vh;
 }
+
+/* History follows the client's list/calendar switch, filter pills and entry cards. */
+textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+textarea:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+}
+button > svg,
+.button-link > svg {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+dialog > header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface);
+}
+.dialog-footer {
+  position: sticky;
+  bottom: -24px;
+  padding: 14px 0 4px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+.text-button {
+  min-height: 32px;
+  border: 0;
+  background: transparent;
+  color: var(--pink);
+  padding: 5px 0;
+  font-size: 12px;
+}
+.optional-time {
+  display: grid;
+  gap: 3px;
+  align-content: start;
+}
+.history-view-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px;
+  border: 1px solid #d65c9038;
+  border-radius: 15px;
+  width: fit-content;
+  margin: 0 auto 24px;
+  background: var(--surface);
+}
+.history-view-toggle button {
+  background: transparent;
+  border-color: transparent;
+  min-width: 120px;
+}
+.history-view-toggle button[aria-pressed="true"] {
+  background: var(--accent);
+  color: white;
+}
+.history-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.filter-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.filter-toolbar > .chips {
+  min-width: 0;
+  flex: 1 1 auto;
+  max-width: 100%;
+}
+.history-filters .chips > button {
+  flex-shrink: 0;
+}
+.filter-toolbar > button {
+  flex-shrink: 0;
+  font-size: 12px;
+}
+.range-label {
+  color: var(--pink);
+  font-size: 12px;
+}
+.advanced-filters {
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.history-totals {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.history-totals > .card {
+  min-width: 0;
+}
+.history-totals .summary-amount {
+  font-size: 30px;
+}
+.history-totals .stats {
+  gap: 10px;
+}
+.history-totals .stats strong {
+  font-size: 16px;
+}
+.totals-note {
+  font-size: 12px;
+  margin-top: 14px;
+}
+.history-list-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 14px;
+}
+.history-list-toolbar > p {
+  font-size: 12px;
+}
+.history-list-toolbar > button {
+  font-size: 12px;
+}
+.history-entries {
+  display: grid;
+  gap: 14px;
+}
+.history-entry {
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.history-entry.project-entry {
+  border-left: 3px solid #6ab6d1;
+}
+.selected-entry {
+  border-color: var(--pink);
+}
+.entry-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+.entry-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 55px;
+  background: var(--raised);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.entry-date > strong {
+  font-size: 23px;
+  line-height: 1.2;
+}
+.entry-date > small {
+  font-size: 10px;
+  text-transform: uppercase;
+}
+.entry-identity {
+  flex: 1;
+  min-width: 0;
+}
+.entry-identity h3 {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.entry-identity p {
+  font-size: 12px;
+  margin-top: 3px;
+}
+.entry-identity > small {
+  font-size: 11px;
+}
+.entry-amount {
+  display: grid;
+  gap: 6px;
+  justify-items: end;
+}
+.entry-amount > strong {
+  color: var(--pink);
+  font-size: 22px;
+}
+.payment-badge {
+  display: inline-block;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: #e8ae5a0d;
+  border: 1px solid #e8ae5a26;
+  color: var(--yellow);
+}
+.payment-badge.received {
+  color: var(--green);
+  background: #69cd970b;
+  border-color: #69cd972b;
+}
+.entry-check input {
+  width: 20px;
+}
+.entry-details {
+  border-top: 1px solid var(--border);
+}
+.entry-details > summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 11px 20px;
+  font-size: 12px;
+  list-style: none;
+}
+.entry-details > summary::-webkit-details-marker {
+  display: none;
+}
+.entry-details[open] > summary svg {
+  transform: rotate(180deg);
+}
+.entry-details > .form-stack {
+  padding: 8px 20px 20px;
+}
+.entry-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  font-size: 12px;
+}
+.entry-details .actions button {
+  min-height: 38px;
+  font-size: 12px;
+}
+.entry-notes {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+}
+.entry-footer {
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding: 14px 20px;
+}
+.entry-footer .button-link {
+  flex-shrink: 0;
+  font-size: 12px;
+}
+.bulk-toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  border: 1px solid #d65c9044;
+  background: var(--soft);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.bulk-toolbar small {
+  flex-basis: 100%;
+}
+.bulk-toolbar > span {
+  margin-right: auto;
+}
+.bulk-toolbar button {
+  font-size: 12px;
+}
+.history-export {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 24px 0;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+}
+.history-export p {
+  font-size: 12px;
+  max-width: 490px;
+  margin-top: 5px;
+}
+.history-export > button,
+.history-export > .button-link {
+  flex-shrink: 0;
+  font-size: 12px;
+}
+.empty-actions {
+  justify-content: center;
+  margin-top: 18px;
+}
+.history-paywall {
+  margin-top: 20px;
+}
+.calendar-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.calendar-navigation > button {
+  display: flex;
+  align-items: center;
+}
+.calendar-navigation h3 {
+  min-width: 140px;
+  text-align: center;
+}
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+}
+.calendar-grid > small {
+  text-align: center;
+  padding: 7px 0;
+}
+.calendar-grid > button {
+  min-height: 60px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.calendar-grid > button[aria-pressed="true"] {
+  background: var(--soft);
+  border-color: var(--pink);
+  color: var(--pink);
+}
+.day-dot {
+  position: absolute;
+  bottom: 8px;
+  width: 4px;
+  height: 4px;
+  background: var(--pink);
+  border-radius: 50%;
+}
+.calendar-months {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+.calendar-groups {
+  display: grid;
+  gap: 14px;
+}
+.calendar-group {
+  min-width: 0;
+  padding: 0;
+}
+.calendar-group > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 20px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+}
+.calendar-group > summary::-webkit-details-marker {
+  display: none;
+}
+.calendar-group > summary::after {
+  content: "⌄";
+  color: var(--muted);
+}
+.calendar-group[open] > summary::after {
+  content: "⌃";
+}
+.calendar-group > summary strong {
+  display: block;
+  font-size: 16px;
+  color: var(--pink);
+}
+.calendar-group > summary small {
+  font-size: 11px;
+}
+.calendar-group-entries {
+  padding: 15px 20px;
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 8px;
+}
+.calendar-entry-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+  font-size: 12px;
+}
+.calendar-entry-link > strong {
+  color: var(--pink);
+  white-space: nowrap;
+}
+.month-breakdown {
+  padding: 0 20px 20px;
+  display: grid;
+  gap: 7px;
+}
+.month-breakdown > div {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.month-breakdown h3 {
+  margin-bottom: 8px;
+}
+@media (max-width: 640px) {
+  .page-heading > .actions {
+    justify-content: flex-end;
+  }
+  .filter-toolbar {
+    flex-wrap: wrap;
+  }
+  .filter-toolbar > .chips {
+    width: 100%;
+    flex-basis: 100%;
+  }
+  .history-entry .entry-main {
+    padding: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .entry-identity {
+    flex-basis: 140px;
+  }
+  .entry-amount {
+    margin-left: auto;
+  }
+  .entry-detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .entry-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .history-export {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .history-export > .button-link,
+  .history-export > button {
+    width: 100%;
+  }
+  .calendar-months {
+    grid-template-columns: 1fr;
+  }
+  .calendar-group > summary {
+    flex-wrap: wrap;
+    padding: 16px;
+  }
+  .calendar-entry-link {
+    flex-wrap: wrap;
+  }
+  .calendar-grid {
+    gap: 3px;
+  }
+  .calendar-grid > button {
+    min-height: 48px;
+    padding: 4px;
+  }
+  .calendar-grid > small {
+    font-size: 10px;
+  }
+  .history-view-toggle {
+    width: 100%;
+  }
+  .history-view-toggle button {
+    flex: 1;
+  }
+  .bulk-toolbar button {
+    flex-grow: 1;
+  }
+  .dialog-footer {
+    bottom: -24px;
+  }
+}
+.pay-section {
+  margin-top: 20px;
+  padding: 0;
+  overflow: hidden;
+}
+.pay-section > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px;
+  cursor: pointer;
+  list-style: none;
+}
+.pay-section > summary::-webkit-details-marker {
+  display: none;
+}
+.pay-section > summary strong {
+  display: block;
+  font-size: 16px;
+}
+.pay-section > summary small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 5px;
+  line-height: 1.6;
+}
+.pay-section[open] > summary {
+  border-bottom: 1px solid var(--border);
+}
+.pay-section[open] .section-chevron {
+  transform: rotate(180deg);
+}
+.pay-section > .panel-content {
+  padding: 24px;
+}
+.pay-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.panel-content:has(> .pay-range) {
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+.panel-content:has(> .pay-range) .chips {
+  min-width: 0;
+  max-width: 100%;
+}
+.panel-content:has(> .pay-range) .chips > button {
+  flex-shrink: 0;
+}
+.pay-selects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-width: 100%;
+}
+.pay-selects .field {
+  min-width: 120px;
+  max-width: 100%;
+}
+.pay-selects select {
+  max-width: 240px;
+}
+.pay-period-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-block: 16px;
+}
+.pay-period-controls p {
+  margin: 0;
+}
+.pay-range {
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.pay-summary {
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+.pay-takehome {
+  font:
+    800 clamp(32px, 5vw, 44px)/1.4 "JetBrains Mono",
+    monospace;
+  color: var(--green);
+  overflow-wrap: anywhere;
+}
+.pay-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(155px, 100%), 1fr));
+  gap: 12px;
+  margin-block: 18px;
+}
+.pay-metric {
+  min-width: 0;
+  padding: 16px;
+  border-radius: 12px;
+  background: hsl(var(--brand-h) 16% 7%);
+  border: 1px solid var(--border);
+  display: grid;
+  gap: 9px;
+  align-content: start;
+}
+.pay-summary > .pay-metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.pay-estimator > .pay-metrics {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.pay-metric > span {
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.pay-metric > strong {
+  font-size: 18px;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+  font-family: "JetBrains Mono", monospace;
+}
+.positive {
+  color: var(--green);
+}
+.warning {
+  color: var(--yellow);
+}
+.pay-badge {
+  border: 1px solid currentColor;
+  border-radius: 30px;
+  padding: 5px 9px;
+  font-size: 10px;
+  font-weight: 700;
+}
+.pay-notice,
+.pay-lock {
+  border: 1px solid var(--border);
+  background: hsl(var(--brand-h) 25% 13% / 0.45);
+  padding: 20px;
+  border-radius: 12px;
+  margin-block: 16px;
+}
+.pay-lock a {
+  display: inline-flex;
+  margin-top: 8px;
+}
+.paycheck-grid,
+.deduction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: 16px;
+  margin-block: 16px;
+}
+.paycheck-card {
+  min-width: 0;
+  border: 1px solid var(--border);
+  background: hsl(var(--brand-h) 16% 8%);
+  border-radius: 14px;
+  padding: 20px;
+}
+.paycheck-card h3,
+.paycheck-card h4 {
+  margin: 0;
+}
+.paycheck-card .pay-metric {
+  padding: 12px;
+}
+.paycheck-card .pay-metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.paycheck-card .pay-metric strong {
+  font-size: 15px;
+}
+.button-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pay-record {
+  justify-content: flex-start;
+  margin-block: 24px;
+  align-items: flex-end;
+}
+.pay-record .field {
+  min-width: 180px;
+  max-width: 100%;
+}
+.pay-record button {
+  margin-bottom: 4px;
+}
+.pay-deductions {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  margin-top: 24px;
+}
+.pay-net {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--green);
+}
+.pay-lines {
+  list-style: none;
+  padding: 0;
+}
+.pay-lines li {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.pay-chart {
+  margin-block: 24px;
+  min-width: 0;
+}
+.pay-chart-scroll,
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+.pay-chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  min-width: 100%;
+  width: max-content;
+  padding: 16px 0;
+}
+.pay-bar {
+  flex: 0 0 72px;
+  text-align: center;
+  display: grid;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.pay-bar-track {
+  height: 125px;
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--border);
+}
+.pay-bar-track span {
+  display: block;
+  width: 100%;
+  background: var(--green);
+  border-radius: 5px 5px 0 0;
+}
+.pay-bar.hours .pay-bar-track span {
+  background: var(--pink);
+}
+.pay-bar small,
+.pay-bar strong {
+  font-size: 11px;
+}
+.pay-chart details {
+  font-size: 12px;
+  color: var(--muted);
+}
+.pay-chart summary {
+  cursor: pointer;
+  padding-block: 8px;
+}
+.pay-chart table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+.pay-chart th,
+.pay-chart td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.pay-disclaimer {
+  font-size: 12px;
+  line-height: 1.8;
+  margin-block: 24px;
+}
+.form-actions {
+  position: sticky;
+  bottom: -24px;
+  background: var(--surface);
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+  margin: 20px -24px -24px;
+  padding: 16px 24px;
+}
+dialog form:has(.form-actions) > fieldset {
+  display: grid;
+  gap: 18px;
+}
+dialog form:has(.form-actions) > fieldset > p {
+  margin: 0;
+}
+.preserve-lines {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+progress {
+  width: 100%;
+  height: 10px;
+  accent-color: var(--pink);
+}
+@media (max-width: 640px) {
+  .pay-section > summary,
+  .pay-section > .panel-content {
+    padding: 18px;
+  }
+  .paycheck-card {
+    padding: 16px;
+  }
+  .pay-selects {
+    width: 100%;
+  }
+  .pay-summary > .pay-metrics,
+  .pay-estimator > .pay-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pay-selects .field {
+    flex: 1;
+    min-width: 0;
+  }
+  .pay-selects select {
+    width: 100%;
+  }
+  .pay-period-controls > .button-row {
+    width: 100%;
+  }
+  .pay-period-controls > .button-row > button {
+    flex: 1 1 90px;
+    font-size: 11px;
+  }
+  .paycheck-card .pay-metrics {
+    grid-template-columns: 1fr;
+  }
+  .pay-record > * {
+    width: 100%;
+  }
+}
