@@ -1,6 +1,6 @@
 # Clocked & Paid web
 
-Next.js App Router app, beside `mobile/` and `backend/`. The client source provides visual references; the reviewed mobile models supply calculation and state behavior. Tracker, History/Calendar and Pay are implemented for review, not the full web product. See [web scope](../docs/WEB_SCOPE.md), [parity/status](../docs/WEB_PARITY.md), [History details](../docs/WEB_HISTORY_PARITY.md) and [Pay details](../docs/WEB_PAY_PARITY.md).
+Next.js App Router app, beside `mobile/` and `backend/`. The client source provides visual references; the reviewed mobile models supply calculation and state behavior. Tracker, History/Calendar, Pay and Jobs are implemented for review, not the full web product. See [web scope](../docs/WEB_SCOPE.md), [parity/status](../docs/WEB_PARITY.md), [History details](../docs/WEB_HISTORY_PARITY.md), [Pay details](../docs/WEB_PAY_PARITY.md) and [Jobs details](../docs/WEB_JOBS_PARITY.md).
 
 ## Run
 
@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`. `/` opens `/tracker`; History is at `/history` and Pay at `/pay`. No backend, API keys, environment file or sign-in is required for guest tracking. Jobs, Settings and account/landing flows are subsequent phases; their navigation labels do not lead to unfinished routes.
+Open `http://localhost:3000`. `/` opens `/tracker`; History is at `/history`, Pay at `/pay`, and Jobs at `/jobs`. No backend, API keys, environment file or sign-in is required for guest tracking. Settings and account/landing flows are subsequent phases; their navigation labels do not lead to unfinished routes.
 
 ## Verify
 
@@ -41,7 +41,7 @@ The web snapshot avoids importing native dependencies or requiring the mobile bu
 
 ## Local data and API boundary
 
-IndexedDB database `clocked-paid-web` stores versioned state for this origin. Each save reads the latest snapshot and commits the reducer result in one transaction; commands can prepare/validate synchronously against that snapshot. History corrections and Pay forms reject stale originals rather than overwriting newer records. Pay validates receipt overlap and deduction consumption against the latest transaction snapshot. Failures retain existing UI state and inputs. Multiple tabs broadcast revision changes. Initial hydration is separate from ordinary updates, so toggling pay visibility cannot accidentally trigger startup privacy defaults.
+IndexedDB database `clocked-paid-web` stores versioned state for this origin. Each save reads the latest snapshot and commits the reducer result in one transaction; commands can prepare/validate synchronously against that snapshot. History corrections, Pay forms and Jobs forms reject stale originals rather than overwriting newer records. Pay validates receipt overlap and deduction consumption against the latest transaction snapshot. Failures retain existing UI state and inputs. Multiple tabs broadcast revision changes. Initial hydration is separate from ordinary updates, so toggling pay visibility cannot accidentally trigger startup privacy defaults.
 
 No real credentials are stored or real billing/auth/cloud writes made. Free/Premium is a local preview. Future backend endpoints belong behind the repository/RTK Query boundary, not inside UI components. Never modify `../backend/` during frontend work.
 

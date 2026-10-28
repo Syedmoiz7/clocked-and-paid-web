@@ -69,6 +69,7 @@ export function Tracker() {
     };
   }, []);
   useEffect(() => {
+    if (document.documentElement.dataset.reminderTitle) return;
     document.title =
       shift && data.preferences.headerTimerMode !== "off"
         ? `${formatDuration(data.preferences.headerTimerMode === "count-down" ? Math.abs((metrics.projected ?? now) - now) / 1000 : metrics.worked)} · Clocked & Paid`

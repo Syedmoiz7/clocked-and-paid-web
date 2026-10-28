@@ -45,7 +45,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Link>
           <nav aria-label="Main navigation">
             {links.map(({ href, label, icon: Icon }) =>
-              ["/tracker", "/history", "/pay"].includes(href) ? (
+              ["/tracker", "/history", "/pay", "/jobs"].includes(href) ? (
                 <Link
                   key={href}
                   className={path === href ? "active" : ""}
@@ -83,7 +83,9 @@ export function AppShell({ children }: { children: ReactNode }) {
                   ? "/plans?returnTo=history"
                   : path === "/pay"
                     ? "/plans?returnTo=pay"
-                    : "/plans"
+                    : path === "/jobs"
+                      ? "/plans?returnTo=jobs"
+                      : "/plans"
               }
             >
               <Sparkles size={16} />

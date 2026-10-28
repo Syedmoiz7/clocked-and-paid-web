@@ -23,6 +23,7 @@ export function DeductionForm({
   data,
   initial,
   jobId,
+  lockedJobId,
   bounds,
   onSave,
   onClose,
@@ -30,6 +31,7 @@ export function DeductionForm({
   data: AppState;
   initial?: Deduction;
   jobId: string | null;
+  lockedJobId?: string;
   bounds: Bounds;
   onSave: (deduction: Deduction) => Promise<string | null>;
   onClose: () => void;
@@ -164,6 +166,7 @@ export function DeductionForm({
             <span>Deduction job</span>
             <select
               value={draft.jobId ?? ""}
+              disabled={Boolean(lockedJobId)}
               onChange={(event) => {
                 const jobId = event.target.value || null,
                   nextCurrency =
@@ -186,6 +189,11 @@ export function DeductionForm({
               ))}
             </select>
           </label>
+          {lockedJobId && (
+            <p>
+              This deduction stays with this job. Manage other scopes in Pay.
+            </p>
+          )}
           <Toggle
             label="Enabled"
             checked={draft.enabled}

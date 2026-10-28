@@ -2,109 +2,91 @@
 import { useEffect, useState } from "react";
 import { Bell } from "lucide-react";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
-import { Field, Toggle } from "@/components/Fields";
+import { Field, Toggle, Modal } from "@/components/Fields";
 import {
   acknowledgeJobReminder,
   setNotificationPermission,
   updateReminders,
 } from "@/store/appSlice";
-import { jobAlerts, type JobAlert } from "@/features/jobs/model";
+import { alertNextAt } from "@/features/jobs/model";
+import {
+  workspaceReminderRules,
+  nextDueReminder,
+} from "@/features/jobs/reminders";
+import { primeReminderAudio, playReminderSound } from "@/lib/reminderAudio";
+const delivered = new Set<string>();
 
 export function useReminderRules() {
-  const data = useApp();
-  const shift = data.activeShift;
-  const job = data.jobs.find(
-    (item) => item.id === (shift?.jobId ?? data.selectedJobId),
-  );
-  if (!shift || !job) return [];
-  const base = job.reminderSettings ?? data.preferences.defaultReminders;
-  const settings = {
-    ...base,
-    lunchMode: data.reminders.lunchReminder
-      ? base.lunchMode === "off"
-        ? ("relative" as const)
-        : base.lunchMode
-      : ("off" as const),
-    returnReminder: data.reminders.returnReminder,
-    snoozeMinutes: data.reminders.reminderSnoozeMinutes,
-  };
-  const rules = jobAlerts(shift, {
-    ...job,
-    lunchEnabled: data.todayPlan.lunchEnabled,
-    lunchMinutes: data.todayPlan.lunchMinutes,
-    reminderSettings: settings,
-  });
-  if (data.reminders.customReminderMinutes)
-    rules.push({
-      key: `${shift.id}:session-custom`,
-      jobId: job.id,
-      shiftId: shift.id,
-      name: "Shift reminder",
-      message: "Your custom shift reminder is due.",
-      at:
-        Date.parse(shift.startedAt) +
-        data.reminders.customReminderMinutes * 60000,
-      repeatMinutes: 0,
-      priority: "medium",
-      settings,
-    });
-  return rules;
+  return workspaceReminderRules(useApp());
 }
 export function ReminderHost({ now }: { now: number }) {
   const data = useApp(),
     rules = useReminderRules(),
     { commit, busy } = useWorkspace();
-  const [alert, setAlert] = useState<JobAlert | null>(null);
-  const due = rules.find(
-    (rule) => (data.jobReminderAcknowledgements[rule.key] ?? rule.at) <= now,
-  );
+  const alert = nextDueReminder(data, rules, now);
+  const deliveryKey = alert
+    ? `${alert.key}:${alertNextAt(alert, data.jobReminderAcknowledgements)}`
+    : null;
   useEffect(() => {
-    if (alert && !rules.some((rule) => rule.key === alert.key)) {
-      setAlert(null);
-      return;
-    }
-    if (!due || alert) return;
-    setAlert(due);
+    if (!alert || !deliveryKey || delivered.has(deliveryKey)) return;
+    delivered.add(deliveryKey);
+    if (delivered.size > 500)
+      delivered.delete(delivered.values().next().value!);
+    if (alert.settings.sound) playReminderSound();
     if (
       typeof Notification !== "undefined" &&
       Notification.permission === "granted"
     ) {
       try {
-        new Notification(due.name, {
-          body: due.message,
+        new Notification(alert.name, {
+          body: alert.message,
           icon: "/branding/icon.png",
-          tag: due.key,
+          tag: alert.key,
+          silent: !alert.settings.sound,
         });
       } catch {
-        /* In-page alert remains available where notifications are unsupported. */
+        /* In-page reminder is still available. */
       }
     }
-  }, [due?.key, alert]);
-  if (!alert || !rules.some((rule) => rule.key === alert.key)) return null;
+  }, [deliveryKey]);
+  useEffect(() => {
+    if (!alert?.settings.indicator) return;
+    const previous = document.title;
+    document.documentElement.dataset.reminderTitle = "active";
+    let visible = true;
+    const flash = () => {
+      document.title = visible ? `Reminder: ${alert.name}` : previous;
+      visible = !visible;
+    };
+    flash();
+    const timer = setInterval(flash, 1200);
+    return () => {
+      clearInterval(timer);
+      delete document.documentElement.dataset.reminderTitle;
+      document.title = previous;
+    };
+  }, [alert?.key, alert?.settings.indicator]);
+  if (!alert) return null;
   const acknowledge = async (snooze: boolean) => {
-    const delay = snooze
-      ? data.reminders.reminderSnoozeMinutes
-      : alert.repeatMinutes;
-    if (
-      await commit(
-        acknowledgeJobReminder({
-          key: alert.key,
-          nextAt: delay ? Date.now() + delay * 60000 : Number.MAX_SAFE_INTEGER,
-        }),
-      )
-    )
-      setAlert(null);
+    const delay = snooze ? alert.settings.snoozeMinutes : alert.repeatMinutes;
+    await commit(
+      acknowledgeJobReminder({
+        key: alert.key,
+        nextAt: delay ? Date.now() + delay * 60000 : -1,
+      }),
+    );
   };
-  return (
+  const content = (
     <aside className="card reminder-alert" role="status">
       <div>
         <Bell size={18} />
         <h3>{alert.name}</h3>
       </div>
       <p>{alert.message}</p>
+      <p>{data.jobs.find((job) => job.id === alert.jobId)?.name}</p>
       <div className="actions">
         <button disabled={busy} onClick={() => void acknowledge(true)}>
-          Snooze {data.reminders.reminderSnoozeMinutes}m
+          Snooze {alert.settings.snoozeMinutes}m
         </button>
         <button disabled={busy} onClick={() => void acknowledge(false)}>
           Dismiss
@@ -112,13 +94,24 @@ export function ReminderHost({ now }: { now: number }) {
       </div>
     </aside>
   );
+  return alert.settings.overlay ? (
+    <Modal
+      title={alert.name}
+      onClose={() => void acknowledge(false)}
+      busy={busy}
+    >
+      {content}
+    </Modal>
+  ) : (
+    content
+  );
 }
 
 export function GlobalReminderHost() {
   const data = useApp();
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
-    if (!data.activeShift) return;
+    if (!data.activeShift && !data.extraShifts.length) return;
     const tick = () => setNow(Date.now()),
       timer = setInterval(tick, 1000);
     tick();
@@ -129,7 +122,16 @@ export function GlobalReminderHost() {
       window.removeEventListener("focus", tick);
       document.removeEventListener("visibilitychange", tick);
     };
-  }, [data.activeShift?.id]);
+  }, [data.activeShift?.id, data.extraShifts.length]);
+  useEffect(() => {
+    const prime = () => primeReminderAudio();
+    window.addEventListener("pointerdown", prime);
+    window.addEventListener("keydown", prime);
+    return () => {
+      window.removeEventListener("pointerdown", prime);
+      window.removeEventListener("keydown", prime);
+    };
+  }, []);
   return <ReminderHost now={now} />;
 }
 export function Reminders() {
@@ -164,7 +166,7 @@ export function Reminders() {
         closed is unavailable.
       </p>
       <p>
-        {data.activeShift
+        {data.activeShift || data.extraShifts.length
           ? `${rules.length} reminder rule(s) for this shift.`
           : "Clock in to start reminders."}{" "}
         Browser notifications: {permission}.
