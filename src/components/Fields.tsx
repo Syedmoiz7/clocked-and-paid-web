@@ -77,8 +77,18 @@ export function Modal({
   useEffect(() => {
     const node = dialog.current;
     const previous = document.activeElement as HTMLElement | null;
-    node?.showModal();
+    const show = () => {
+      if (
+        !document.documentElement.dataset.workspaceLocked &&
+        node &&
+        !node.open
+      )
+        node.showModal();
+    };
+    show();
+    window.addEventListener("workspace-unlocked", show);
     return () => {
+      window.removeEventListener("workspace-unlocked", show);
       node?.close();
       previous?.focus();
     };

@@ -220,6 +220,7 @@ export function JobForm({
               onNumber={onNumber}
             />
             <CustomReminders
+              clockFormat={data.preferences.clockFormat}
               value={settings.custom}
               onChange={(custom) => updateSettings({ custom })}
               onEdit={setReminder}

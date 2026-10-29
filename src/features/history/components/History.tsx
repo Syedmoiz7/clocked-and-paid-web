@@ -51,7 +51,6 @@ export function History() {
         tick,
         data.activeShift || data.extraShifts.length ? 1000 : 30000,
       );
-    document.title = "Work History · Clocked & Paid";
     window.addEventListener("focus", tick);
     document.addEventListener("visibilitychange", tick);
     return () => {

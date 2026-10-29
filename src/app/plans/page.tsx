@@ -20,7 +20,9 @@ export default function Plans() {
           ? "/pay"
           : target === "jobs"
             ? "/jobs"
-            : "/tracker",
+            : target === "settings"
+              ? "/settings"
+              : "/tracker",
     );
   }, []);
   const choose = async (premium: boolean) => {
@@ -42,7 +44,9 @@ export default function Plans() {
               ? "Pay"
               : returnTo === "/jobs"
                 ? "Jobs"
-                : "Tracker"}{" "}
+                : returnTo === "/settings"
+                  ? "Settings"
+                  : "Tracker"}{" "}
           →
         </Link>
       </div>

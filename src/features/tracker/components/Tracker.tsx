@@ -68,19 +68,6 @@ export function Tracker() {
       document.removeEventListener("visibilitychange", tick);
     };
   }, []);
-  useEffect(() => {
-    if (document.documentElement.dataset.reminderTitle) return;
-    document.title =
-      shift && data.preferences.headerTimerMode !== "off"
-        ? `${formatDuration(data.preferences.headerTimerMode === "count-down" ? Math.abs((metrics.projected ?? now) - now) / 1000 : metrics.worked)} · Clocked & Paid`
-        : "Clocked & Paid";
-  }, [
-    now,
-    shift,
-    data.preferences.headerTimerMode,
-    metrics.projected,
-    metrics.worked,
-  ]);
   const fmt = (
     amount: number,
     currency = job?.currency ?? data.preferences.currency,

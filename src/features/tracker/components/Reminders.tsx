@@ -14,12 +14,14 @@ import {
   nextDueReminder,
 } from "@/features/jobs/reminders";
 import { primeReminderAudio, playReminderSound } from "@/lib/reminderAudio";
+import { usePrivacy } from "@/features/settings/components/PrivacyProvider";
 const delivered = new Set<string>();
 
 export function useReminderRules() {
   return workspaceReminderRules(useApp());
 }
 export function ReminderHost({ now }: { now: number }) {
+  const privacy = usePrivacy();
   const data = useApp(),
     rules = useReminderRules(),
     { commit, busy } = useWorkspace();
@@ -32,25 +34,30 @@ export function ReminderHost({ now }: { now: number }) {
     delivered.add(deliveryKey);
     if (delivered.size > 500)
       delivered.delete(delivered.values().next().value!);
-    if (alert.settings.sound) playReminderSound();
+    if (alert.settings.sound && !privacy.locked) playReminderSound();
     if (
       typeof Notification !== "undefined" &&
       Notification.permission === "granted"
     ) {
       try {
-        new Notification(alert.name, {
-          body: alert.message,
-          icon: "/branding/icon.png",
-          tag: alert.key,
-          silent: !alert.settings.sound,
-        });
+        new Notification(
+          privacy.configured ? "Clocked & Paid reminder" : alert.name,
+          {
+            body: privacy.configured
+              ? "Open your workspace to view this reminder."
+              : alert.message,
+            icon: "/branding/icon.png",
+            tag: alert.key,
+            silent: !alert.settings.sound,
+          },
+        );
       } catch {
         /* In-page reminder is still available. */
       }
     }
   }, [deliveryKey]);
   useEffect(() => {
-    if (!alert?.settings.indicator) return;
+    if (!alert?.settings.indicator || privacy.locked) return;
     const previous = document.title;
     document.documentElement.dataset.reminderTitle = "active";
     let visible = true;
@@ -65,8 +72,8 @@ export function ReminderHost({ now }: { now: number }) {
       delete document.documentElement.dataset.reminderTitle;
       document.title = previous;
     };
-  }, [alert?.key, alert?.settings.indicator]);
-  if (!alert) return null;
+  }, [alert?.key, alert?.settings.indicator, privacy.locked]);
+  if (!alert || privacy.locked) return null;
   const acknowledge = async (snooze: boolean) => {
     const delay = snooze ? alert.settings.snoozeMinutes : alert.repeatMinutes;
     await commit(

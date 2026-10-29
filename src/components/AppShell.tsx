@@ -14,6 +14,7 @@ import {
 import { useApp, useWorkspace } from "./WorkspaceProvider";
 import { setPayVisible } from "@/store/appSlice";
 import { GlobalReminderHost } from "@/features/tracker/components/Reminders";
+import { BrowserTabTime } from "./BrowserTabTime";
 import type { ReactNode, CSSProperties } from "react";
 
 const links = [
@@ -45,7 +46,9 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Link>
           <nav aria-label="Main navigation">
             {links.map(({ href, label, icon: Icon }) =>
-              ["/tracker", "/history", "/pay", "/jobs"].includes(href) ? (
+              ["/tracker", "/history", "/pay", "/jobs", "/settings"].includes(
+                href,
+              ) ? (
                 <Link
                   key={href}
                   className={path === href ? "active" : ""}
@@ -85,7 +88,9 @@ export function AppShell({ children }: { children: ReactNode }) {
                     ? "/plans?returnTo=pay"
                     : path === "/jobs"
                       ? "/plans?returnTo=jobs"
-                      : "/plans"
+                      : path === "/settings"
+                        ? "/plans?returnTo=settings"
+                        : "/plans"
               }
             >
               <Sparkles size={16} />
@@ -95,6 +100,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
       <main id="main" className="page">
+        <BrowserTabTime />
         <GlobalReminderHost />
         {children}
       </main>

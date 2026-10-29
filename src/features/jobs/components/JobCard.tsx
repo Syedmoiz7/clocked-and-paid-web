@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import type { AppState, MockJob } from "@/types";
 import { money, localDate } from "@/features/history/model";
+import { clockLabel } from "@/features/settings/model";
 import {
   jobBadges,
   jobInProgress,
@@ -136,7 +137,7 @@ export function JobCard({
                 {settings.lunchMode === "off"
                   ? "Off"
                   : settings.lunchMode === "fixed"
-                    ? `At ${settings.lunchTime}`
+                    ? `At ${clockLabel(settings.lunchTime, data.preferences.clockFormat)}`
                     : `${settings.lunchHours}h after clock-in`}
               </dd>
             </div>

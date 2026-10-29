@@ -8,10 +8,12 @@ export function ReminderEditor({
   initial,
   onUse,
   onClose,
+  target = "job",
 }: {
   initial: CustomReminder;
   onUse: (value: CustomReminder) => void;
   onClose: () => void;
+  target?: "job" | "defaults";
 }) {
   const [draft, setDraft] = useState(initial),
     [offset, setOffset] = useState(String(initial.offsetMinutes)),
@@ -34,8 +36,9 @@ export function ReminderEditor({
       >
         <fieldset>
           <p>
-            Use this reminder in the job draft, then save the job to activate
-            it. Cancelling the job discards these changes.
+            {target === "job"
+              ? "Use this reminder in the job draft, then save the job to activate it. Cancelling the job discards these changes."
+              : "Use this reminder in the defaults draft, then Save Changes to activate it. Discarding App preferences removes these changes."}
           </p>
           <Field
             label="Reminder name"
@@ -116,7 +119,9 @@ export function ReminderEditor({
             Cancel reminder
           </button>
           <button type="submit" className="primary">
-            Use reminder in job draft
+            {target === "job"
+              ? "Use reminder in job draft"
+              : "Use reminder in defaults draft"}
           </button>
         </footer>
       </form>

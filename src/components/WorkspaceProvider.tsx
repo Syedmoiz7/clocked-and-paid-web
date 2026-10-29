@@ -14,6 +14,7 @@ import { workspaceRepository, type WorkspaceCommand } from "@/lib/workspace";
 import { enterGuest, refreshTrackerDay } from "@/store/appSlice";
 import { localDate } from "@/utils/dateOnly";
 import type { AppState } from "@/types";
+import { EmergencyRecovery } from "@/features/settings/components/EmergencyRecovery";
 
 const Context = createContext<{
   commit: (action: WorkspaceCommand) => Promise<boolean>;
@@ -139,7 +140,10 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
             <h1>{loadError ? "Workspace unavailable" : "Clocked & Paid"}</h1>
             <p>{loadError || "Opening your workspace…"}</p>
             {loadError && (
-              <button onClick={() => window.location.reload()}>Retry</button>
+              <>
+                <button onClick={() => window.location.reload()}>Retry</button>
+                <EmergencyRecovery />
+              </>
             )}
           </main>
         )}

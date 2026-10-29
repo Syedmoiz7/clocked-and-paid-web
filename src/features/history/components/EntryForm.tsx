@@ -240,9 +240,18 @@ export function EntryForm({
                   {draft.breaks.map((item) => (
                     <small key={item.id}>
                       {item.label || "Break"}:{" "}
-                      {new Date(item.start).toLocaleTimeString()} →{" "}
+                      {new Date(item.start).toLocaleTimeString([], {
+                        hour: "numeric",
+                        minute: "2-digit",
+                        hour12: data.preferences.clockFormat === "12h",
+                      })}{" "}
+                      →{" "}
                       {item.end
-                        ? new Date(item.end).toLocaleTimeString()
+                        ? new Date(item.end).toLocaleTimeString([], {
+                            hour: "numeric",
+                            minute: "2-digit",
+                            hour12: data.preferences.clockFormat === "12h",
+                          })
                         : "Incomplete"}
                     </small>
                   ))}
