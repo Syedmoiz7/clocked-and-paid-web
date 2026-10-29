@@ -13,14 +13,17 @@ export function authRedirect(
   path: string,
 ): string | null {
   const destination = entryDestination(data);
-  if (path === "/") return destination;
   if (workspacePaths.has(path))
     return destination !== "/tracker" ? destination : null;
   if (path === "/onboarding")
     return data.auth.session === "mock" ? null : destination;
   if (path === "/plans")
     return data.auth.session === "signed-out" ? "/auth" : null;
-  if (path === "/auth" && data.auth.session === "mock" && !data.auth.pending)
+  if (
+    ["/auth", "/signup"].includes(path) &&
+    data.auth.session === "mock" &&
+    !data.auth.pending
+  )
     return destination;
   return null;
 }

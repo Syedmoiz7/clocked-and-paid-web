@@ -51,6 +51,15 @@ test("fresh work routes require entry; guest resumes an empty workspace after re
   await expect(page).toHaveURL(/\/tracker$/);
   expect((await savedState(page)).history).toEqual([]);
   await page.goto("/");
+  await expect(
+    page.getByRole("heading", {
+      name: "Track your time. Know your pay.",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page
+    .getByRole("link", { name: "Open your workspace →", exact: true })
+    .click();
   await expect(page).toHaveURL(/\/tracker$/);
   await page.goto("/onboarding");
   await expect(page).toHaveURL(/\/tracker$/);

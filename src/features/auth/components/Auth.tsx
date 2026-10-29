@@ -6,13 +6,13 @@ import { AuthLayout, AuthField, AuthError, useAuthTask } from "./Controls";
 import { PlanCards, type PlanChoice } from "./PlanCards";
 
 type View = "sign-in" | "sign-up" | "forgot" | "profile";
-export function Auth() {
+export function Auth({ initialView }: { initialView?: "sign-up" }) {
   const modeId = useId(),
     data = useApp(),
     actions = useAuthActions(),
     task = useAuthTask();
-  const [view, setView] = useState<View>(() =>
-      data.auth.lastProfile ? "profile" : "sign-in",
+  const [view, setView] = useState<View>(
+      () => initialView ?? (data.auth.lastProfile ? "profile" : "sign-in"),
     ),
     [email, setEmail] = useState(data.auth.lastProfile?.email ?? ""),
     [name, setName] = useState(""),

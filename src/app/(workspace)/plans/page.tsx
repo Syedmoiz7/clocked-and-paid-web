@@ -6,7 +6,7 @@ import { AppShell } from "@/components/AppShell";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
 import { setPremiumPreview } from "@/store/appSlice";
 import { useEffect, useState } from "react";
-import { planOptions } from "@/features/auth/components/PlanCards";
+import { planOptions } from "@/features/auth/plans";
 import { planReturn } from "@/features/auth/routing";
 export default function Plans() {
   const data = useApp(),

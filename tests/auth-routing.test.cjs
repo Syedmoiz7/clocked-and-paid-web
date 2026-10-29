@@ -23,7 +23,6 @@ const { mockAccount } = require("../src/features/auth/model.ts");
 test("web routes guard work and setup without blocking callback feedback", () => {
   const initial = actions.initialAppState;
   for (const path of [
-    "/",
     "/tracker",
     "/history",
     "/pay",
@@ -44,6 +43,10 @@ test("web routes guard work and setup without blocking callback feedback", () =>
   assert.equal(authRedirect(mock, "/history"), "/onboarding");
   assert.equal(authRedirect(mock, "/plans"), null);
   assert.equal(authRedirect(mock, "/onboarding"), null);
+});
+test("public information routes do not require a guest or mock session", () => {
+  for (const path of ["/", "/privacy", "/terms", "/contact"])
+    assert.equal(authRedirect(actions.initialAppState, path), null);
 });
 test("plan return accepts only known app destinations including setup review", () => {
   for (const value of [

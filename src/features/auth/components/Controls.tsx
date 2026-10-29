@@ -8,6 +8,7 @@ import {
 } from "react";
 import { Eye, EyeOff, Mail, LockKeyhole, UserRound } from "lucide-react";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
+import Link from "next/link";
 
 export function AuthLayout({
   children,
@@ -33,6 +34,12 @@ export function AuthLayout({
       <p className="auth-footnote">
         Local demo · no backend, email delivery or billing
       </p>
+      <nav className="auth-info-links" aria-label="Information">
+        <Link href="/">Home</Link>
+        <Link href="/privacy">Privacy</Link>
+        <Link href="/terms">Terms</Link>
+        <Link href="/contact">Contact</Link>
+      </nav>
     </main>
   );
 }

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { WorkspaceProvider } from "@/components/WorkspaceProvider";
-import { PrivacyProvider } from "@/features/settings/components/PrivacyProvider";
-import { AuthGate } from "@/features/auth/components/AuthGate";
 import "./globals.css";
+import "@/features/public/public.css";
 export const metadata: Metadata = {
   title: "Clocked & Paid",
   description: "Track your time. Know your pay.",
@@ -15,13 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <PrivacyProvider>
-          <WorkspaceProvider>
-            <AuthGate>{children}</AuthGate>
-          </WorkspaceProvider>
-        </PrivacyProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

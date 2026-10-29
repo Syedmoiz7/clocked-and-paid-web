@@ -1,6 +1,6 @@
 # Clocked & Paid web
 
-Next.js App Router app, beside `mobile/` and `backend/`. The client source provides visual references; the reviewed mobile models supply calculation and state behavior. Tracker, History/Calendar, Pay, Jobs, Settings and mock auth/onboarding are implemented for review, not the full web product. See [web scope](../docs/WEB_SCOPE.md), [parity/status](../docs/WEB_PARITY.md), [History details](../docs/WEB_HISTORY_PARITY.md), [Pay details](../docs/WEB_PAY_PARITY.md), [Jobs details](../docs/WEB_JOBS_PARITY.md) and [Settings details](../docs/WEB_SETTINGS_PARITY.md) and [auth/setup details](../docs/WEB_AUTH_ONBOARDING_PARITY.md).
+Next.js App Router app, beside `mobile/` and `backend/`. The client source provides visual references; the reviewed mobile models supply calculation and state behavior. Tracker, History/Calendar, Pay, Jobs, Settings, mock auth/onboarding and public landing/legal/contact pages are implemented for review, not the full web product. See [web scope](../docs/WEB_SCOPE.md), [parity/status](../docs/WEB_PARITY.md), [History details](../docs/WEB_HISTORY_PARITY.md), [Pay details](../docs/WEB_PAY_PARITY.md), [Jobs details](../docs/WEB_JOBS_PARITY.md), [Settings details](../docs/WEB_SETTINGS_PARITY.md), [auth/setup details](../docs/WEB_AUTH_ONBOARDING_PARITY.md) and [public-page details](../docs/WEB_PUBLIC_PARITY.md).
 
 ## Run
 
@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`. `/` opens `/auth` for a new or signed-out workspace, `/onboarding` for incomplete mock setup, or `/tracker` for a returning guest/completed mock session; History is at `/history`, Pay at `/pay`, Jobs at `/jobs`, and Settings at `/settings`. No backend, API keys, environment file or sign-in is required for guest tracking. Use Continue as Guest, or enter any non-empty mock email/password. Signup includes Free/Premium selection and a local confirmation link; recovery and job onboarding are also functional local previews. Landing/legal/contact screens remain W5 work.
+Open `http://localhost:3000`. `/` is the public landing page. Try as guest opens local tracking; Open your workspace resumes saved work or shows the appropriate sign-in/setup screen; History is at `/history`, Pay at `/pay`, Jobs at `/jobs`, and Settings at `/settings`. No backend, API keys, environment file or sign-in is required for guest tracking. Use Continue as Guest, or enter any non-empty mock email/password. Signup includes Free/Premium selection and a local confirmation link; recovery and job onboarding are also functional local previews. Privacy, Terms and Contact are available at `/privacy`, `/terms` and `/contact`, independently of workspace storage/lock status. Full W5 acceptance remains pending.
 
 ## Verify
 
@@ -30,10 +30,11 @@ Production preview: `npm run build` then `npm start`.
 
 ## Structure
 
-- `src/app`: server pages, root layout, styles and Plans client route.
+- `src/app`: public server pages, metadata and shared styles. `(workspace)/layout.tsx` owns privacy/workspace/auth providers for the app routes without changing their URLs. Public pages work without browser storage.
 - `src/components`: responsive app shell, HTML form controls/dialogs and workspace provider.
 - `src/lib`: store factory, central RTK Query injection seam and IndexedDB repository.
 - `src/features/*/*.ts`, `src/store/appSlice.ts`, `src/types.ts`, `src/utils`: reviewed pure mobile-domain snapshot, plus web-specific History view helpers. The manifest hashes are verified against mobile and web. Browser UI lives under each feature's `components/` directory.
+- `src/features/public`: client-style landing, shared public chrome, contact copy action and public CSS.
 - `public`: existing C&P branding and self-hosted client fonts.
 - `tests`: inherited domain regression tests. `e2e`: browser-specific acceptance scenarios.
 

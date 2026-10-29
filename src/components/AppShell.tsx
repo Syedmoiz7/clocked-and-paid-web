@@ -106,6 +106,12 @@ export function AppShell({ children }: { children: ReactNode }) {
           {data.auth.session === "mock" ? "Mock account" : "Guest workspace"} ·
           saved in this browser
         </span>
+        <nav className="workspace-footer-links" aria-label="Information">
+          <Link href="/">Home</Link>
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/terms">Terms</Link>
+          <Link href="/contact">Contact</Link>
+        </nav>
       </footer>
       {message && (
         <div role="status" className="toast">
