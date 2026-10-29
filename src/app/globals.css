@@ -24,7 +24,8 @@
   --muted: hsl(var(--brand-h) 14% 59%);
   --border: hsl(var(--brand-h) 16% 17%);
   --pink: hsl(var(--brand-h) 62% 62%);
-  --accent: hsl(var(--brand-h) 62% 55%);
+  --accent: hsl(var(--brand-h) 62% 53%);
+  --on-accent: #fff;
   --soft: hsl(var(--brand-h) 32% 14%);
   --green: #69cd97;
   --yellow: #e8ae5a;
@@ -338,12 +339,12 @@ nav .upcoming {
 .primary {
   background: var(--accent);
   border-color: var(--accent);
-  color: white;
+  color: var(--on-accent);
   box-shadow: 0 3px 16px #d65c901a;
 }
 .primary:hover:not(:disabled) {
-  background: #c84279;
-  color: white;
+  background: var(--accent);
+  color: var(--on-accent);
 }
 .clock-button {
   min-width: 240px;
@@ -904,7 +905,7 @@ dialog > header {
 }
 .history-view-toggle button[aria-pressed="true"] {
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
 }
 .history-filters {
   display: grid;
@@ -2260,7 +2261,7 @@ progress {
   display: grid;
   place-items: center;
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
   font-size: 26px;
   font-weight: 800;
   border-radius: 18px;

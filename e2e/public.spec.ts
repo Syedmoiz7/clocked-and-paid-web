@@ -250,6 +250,7 @@ test("guest and signup CTAs preserve an existing completed mock session", async 
 });
 test("public pages fit desktop and narrow screens and expose keyboard skip navigation", async ({
   page,
+  browserName,
 }) => {
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
@@ -269,7 +270,11 @@ test("public pages fit desktop and narrow screens and expose keyboard skip navig
     }
   }
   await page.goto("/");
-  await page.keyboard.press("Tab");
+  await page.keyboard.press(
+    browserName === "webkit" && process.platform === "darwin"
+      ? "Alt+Tab"
+      : "Tab",
+  );
   await expect(
     page.getByRole("link", { name: "Skip to content", exact: true }),
   ).toBeFocused();

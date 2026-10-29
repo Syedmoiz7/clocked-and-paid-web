@@ -3,6 +3,7 @@ import { Panel } from "@/components/Fields";
 import type { AppState } from "@/types";
 import { themeOptions, type SettingsDraft } from "../model";
 import { money } from "@/features/history/model";
+import { accentInk } from "@/lib/theme";
 
 export function Appearance({
   data,
@@ -25,7 +26,10 @@ export function Appearance({
             aria-label={`${option.label}${option.hue !== 338 && !data.isPremium ? ", Premium" : ""}`}
             aria-pressed={option.hue === data.preferences.themeHue}
             disabled={busy}
-            style={{ background: `hsl(${option.hue} 62% 55%)` }}
+            style={{
+              background: `hsl(${option.hue} 62% 55%)`,
+              color: accentInk(option.hue, 55),
+            }}
             onClick={() => onHue(option.hue)}
           >
             {option.hue === data.preferences.themeHue ? "✓" : ""}

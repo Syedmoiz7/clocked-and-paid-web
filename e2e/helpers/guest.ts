@@ -9,6 +9,7 @@ export const test = base.extend({
       .getByRole("button", { name: "Continue as Guest", exact: true })
       .click();
     await expect(page).toHaveURL(/\/tracker$/);
+    await page.waitForLoadState("networkidle");
     await use(page);
   },
 });

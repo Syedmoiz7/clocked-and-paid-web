@@ -43,5 +43,6 @@ export async function seedState(page: Page, changes: Partial<AppState>) {
     });
     db.close();
   }, changes);
+  await page.waitForLoadState("networkidle");
   await page.reload();
 }

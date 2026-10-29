@@ -1,14 +1,9 @@
 "use client";
-import {
-  useId,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
+import { useId, useRef, useState, type ReactNode } from "react";
 import { Eye, EyeOff, Mail, LockKeyhole, UserRound } from "lucide-react";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
 import Link from "next/link";
+import { themeStyle } from "@/lib/theme";
 
 export function AuthLayout({
   children,
@@ -21,7 +16,7 @@ export function AuthLayout({
   return (
     <main
       className={`workspace-theme auth-page${wide ? " auth-wide" : ""}`}
-      style={{ "--brand-h": data.preferences.themeHue } as CSSProperties}
+      style={themeStyle(data.preferences.themeHue)}
     >
       <div className="auth-brand">
         <span className="brand-mark">C&P</span>

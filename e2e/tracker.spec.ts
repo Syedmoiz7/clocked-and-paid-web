@@ -19,6 +19,7 @@ test("manual times persist and clock-out keeps saved work in Today's Summary", a
   await expect(page.getByLabel("Clock in", { exact: true })).toHaveValue("");
   await page.getByRole("button", { name: "Show pay", exact: true }).click();
   await expect(page.locator(".summary-amount")).toHaveText("$180.00");
+  await page.waitForLoadState("networkidle");
   await page.reload();
   await page.getByRole("button", { name: "Show pay", exact: true }).click();
   await expect(page.locator(".summary-amount")).toHaveText("$180.00");

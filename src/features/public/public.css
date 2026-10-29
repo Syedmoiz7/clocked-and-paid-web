@@ -60,7 +60,7 @@
 }
 .public-site .button-link:hover {
   text-decoration: none;
-  filter: brightness(1.12);
+  filter: brightness(0.92);
 }
 .public-site p,
 .public-site li {

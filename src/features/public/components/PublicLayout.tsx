@@ -36,7 +36,7 @@ export function PublicLayout({
       </a>
       <header className="public-header">
         <div className="public-container">
-          <Link className="brand" href="/" aria-label="Clocked and Paid home">
+          <Link className="brand" href="/" title="Clocked & Paid home">
             <span className="brand-mark">C&P</span>
             <span>
               Clocked <em>&</em> Paid

@@ -13,7 +13,8 @@ import {
 } from "lucide-react";
 import { useApp, useWorkspace } from "./WorkspaceProvider";
 import { setPayVisible } from "@/store/appSlice";
-import type { ReactNode, CSSProperties } from "react";
+import type { ReactNode } from "react";
+import { themeStyle } from "@/lib/theme";
 
 const links = [
   { href: "/tracker", label: "Tracker", icon: Clock3 },
@@ -29,7 +30,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div
       className="workspace-theme"
-      style={{ "--brand-h": data.preferences.themeHue } as CSSProperties}
+      style={themeStyle(data.preferences.themeHue)}
     >
       <a className="skip" href="#main">
         Skip to content
