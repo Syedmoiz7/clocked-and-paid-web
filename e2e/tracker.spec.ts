@@ -17,11 +17,11 @@ test("manual times persist and clock-out keeps saved work in Today's Summary", a
     page.getByRole("tab", { name: "Completed Today (1)", exact: true }),
   ).toBeVisible();
   await expect(page.getByLabel("Clock in", { exact: true })).toHaveValue("");
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await expect(page.locator(".summary-amount")).toHaveText("$180.00");
   await page.waitForLoadState("networkidle");
   await page.reload();
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await expect(page.locator(".summary-amount")).toHaveText("$180.00");
   await page.getByRole("button", { name: "Clock in", exact: true }).click();
   await expect(
@@ -64,7 +64,7 @@ test("Premium calculator separates input modes and retains drafts across tabs", 
       exact: true,
     })
     .click();
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await page
     .getByRole("tab", { name: "Hours Calculator", exact: true })
     .click();

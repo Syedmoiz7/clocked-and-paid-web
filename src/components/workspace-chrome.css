@@ -1,0 +1,143 @@
+/* Source: client App.tsx Nav/BottomNav; the approved Show Pay switch stays in the header. */
+@media (min-width: 641px) and (max-width: 1150px) {
+  .nav-inner {
+    padding-block: 10px;
+  }
+  .nav-inner .workspace-navigation {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 900px) {
+  .guest-badge {
+    display: none;
+  }
+  .workspace-account .account-action {
+    width: 44px;
+    padding: 8px;
+  }
+  .workspace-account .account-action > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+@media (max-width: 640px) {
+  .topbar {
+    backdrop-filter: none;
+  }
+  .nav-inner {
+    padding: 10px 16px;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+  .nav-actions {
+    gap: 7px;
+  }
+  .pay-visibility-toggle {
+    padding-inline: 8px;
+  }
+  .nav-inner .workspace-navigation {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 40;
+    width: 100%;
+    min-height: 68px;
+    padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px));
+    overflow: visible;
+    gap: 0;
+    background: linear-gradient(
+      0deg,
+      hsl(var(--brand-h) 20% 4%),
+      hsl(var(--brand-h) 20% 5.5% / 0.97)
+    );
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -1px 24px hsl(var(--brand-h) 62% 55% / 0.05);
+  }
+  .workspace-navigation > a {
+    flex: 1;
+    min-width: 0;
+    gap: 4px;
+    padding: 4px 2px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .workspace-navigation .navigation-icon {
+    width: 40px;
+    height: 24px;
+    border-radius: 20px;
+  }
+  .workspace-navigation .navigation-icon > svg {
+    width: 18px;
+    height: 18px;
+  }
+  .workspace-navigation > a.active .navigation-icon {
+    background: var(--soft);
+  }
+  .workspace-navigation .navigation-label {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+  .page {
+    padding-bottom: 100px;
+  }
+  .site-footer {
+    padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+  }
+  .toast {
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+  .settings-save-bar {
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+@media (max-width: 360px) {
+  .nav-actions {
+    gap: 5px;
+  }
+  .pay-visibility-toggle {
+    gap: 6px;
+    padding-inline: 6px;
+  }
+  .nav-actions .plan-link > svg {
+    display: none;
+  }
+}
+
+/* Source-specific Settings card accents, rather than inferred icon choices. */
+.panel-icon-cyan {
+  color: hsl(196 72% 52%);
+  background: hsl(196 72% 52% / 0.1);
+  border-color: hsl(196 72% 52% / 0.2);
+}
+.panel-icon-blue {
+  color: hsl(220 72% 72%);
+  background: hsl(220 72% 62% / 0.1);
+  border-color: hsl(220 72% 62% / 0.22);
+}
+.panel-icon-danger {
+  color: hsl(0 72% 62%);
+  background: hsl(0 65% 50% / 0.1);
+  border-color: hsl(0 65% 50% / 0.25);
+}
+.panel.panel-danger {
+  background: linear-gradient(145deg, hsl(0 28% 9%), hsl(0 20% 7%));
+  border-color: hsl(0 55% 28% / 0.5);
+}
+.panel-danger > header {
+  border-bottom-color: hsl(0 40% 18% / 0.6);
+}

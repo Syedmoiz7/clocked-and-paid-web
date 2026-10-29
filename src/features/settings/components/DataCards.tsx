@@ -1,4 +1,5 @@
 "use client";
+import { Database, HardDrive, ShieldAlert } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Field, Modal, Panel, Toggle } from "@/components/Fields";
 import {
@@ -59,6 +60,7 @@ export function DataCards({
     <>
       <Panel
         title="Backup & Restore"
+        icon={<Database size={16} />}
         subtitle="JSON contains full business data. CSV contains history only. Downloads are unencrypted; credentials, account identity and plan access are excluded."
       >
         {data.isPremium ? (
@@ -111,6 +113,8 @@ export function DataCards({
       </Panel>
       <Panel
         title="Data Recovery"
+        icon={<HardDrive size={16} />}
+        iconTone="blue"
         subtitle="A browser safety snapshot can add missing history. It does not roll back matching-ID edits or replace a full external backup."
       >
         {data.isPremium ? (
@@ -154,6 +158,9 @@ export function DataCards({
       </Panel>
       <Panel
         title="Danger Zone"
+        icon={<ShieldAlert size={16} />}
+        iconTone="danger"
+        variant="danger"
         subtitle="Reset business records, local defaults and recovery. Your account/demo mode and privacy lock are retained."
       >
         <button

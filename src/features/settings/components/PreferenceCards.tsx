@@ -1,4 +1,5 @@
 "use client";
+import { CalendarClock, Zap } from "lucide-react";
 import { Field, Panel, Toggle } from "@/components/Fields";
 import type { SettingsDraft } from "../model";
 import { typicalShift } from "../model";
@@ -53,6 +54,7 @@ export function PreferenceCards({
     <>
       <Panel
         title="Workday Defaults"
+        icon={<CalendarClock size={16} />}
         subtitle="Used for planning and calculators. Job-specific rules take priority; running plans are kept."
       >
         <fieldset className="form-stack" disabled={disabled}>
@@ -187,7 +189,9 @@ export function PreferenceCards({
       </Panel>
       <Panel
         title="Preferences"
-        subtitle="Changes apply when you save. Use the header eye button for temporary pay visibility."
+        icon={<Zap size={16} />}
+        iconTone="cyan"
+        subtitle="Changes apply when you save. Use the header Show Pay switch for temporary pay visibility."
       >
         <fieldset className="form-stack" disabled={disabled}>
           <Toggle

@@ -81,6 +81,7 @@ test("information pages and 404 work even when all browser storage is unavailabl
     await expect(
       page.getByText("Workspace unavailable", { exact: true }),
     ).toHaveCount(0);
+    await page.waitForLoadState("networkidle");
   }
   expect(errors).toEqual([]);
 });
@@ -204,6 +205,10 @@ test("locked users can read public pages but workspace entry still requires unlo
   ).toBeVisible();
   const state = await savedState(page);
   await seedState(page, { auth: { ...state.auth, session: "signed-out" } });
+  await expect(page).toHaveURL(/\/auth$/);
+  await expect(
+    page.getByRole("heading", { name: "Workspace locked", exact: true }),
+  ).toBeVisible();
   const lockedSnapshot = await savedValue(page);
   await page.goto("/privacy");
   await expect(

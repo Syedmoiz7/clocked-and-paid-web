@@ -17,6 +17,7 @@ export function Appearance({
   return (
     <Panel
       title="App Theme Color"
+      icon={<span>🎨</span>}
       subtitle="Saved immediately, independently of other preferences. Full palette uses Premium."
     >
       <div className="settings-colors" role="group" aria-label="App theme">

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useRef, useState, type ReactNode } from "react";
 import { Modal } from "@/components/Fields";
+import { ChevronDown } from "lucide-react";
 
 export function PaySection({
   title,
@@ -20,7 +21,7 @@ export function PaySection({
           <small>{subtitle}</small>
         </span>
         <span className="section-chevron" aria-hidden>
-          ⌄
+          <ChevronDown size={16} />
         </span>
       </summary>
       <div className="panel-content">{children}</div>

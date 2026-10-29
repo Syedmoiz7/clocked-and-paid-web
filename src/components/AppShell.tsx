@@ -1,28 +1,14 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Clock3,
-  History,
-  BriefcaseBusiness,
-  Settings2,
-  Wallet,
-  Eye,
-  EyeOff,
-  Sparkles,
-} from "lucide-react";
+import { Sparkles } from "lucide-react";
+import { WorkspaceNavigation } from "./WorkspaceNavigation";
+import { WorkspaceAccount } from "./WorkspaceAccount";
 import { useApp, useWorkspace } from "./WorkspaceProvider";
 import { setPayVisible } from "@/store/appSlice";
 import type { ReactNode } from "react";
 import { themeStyle } from "@/lib/theme";
 
-const links = [
-  { href: "/tracker", label: "Tracker", icon: Clock3 },
-  { href: "/history", label: "History", icon: History },
-  { href: "/pay", label: "Pay", icon: Wallet },
-  { href: "/jobs", label: "Jobs", icon: BriefcaseBusiness },
-  { href: "/settings", label: "Settings", icon: Settings2 },
-];
 export function AppShell({ children }: { children: ReactNode }) {
   const path = usePathname(),
     data = useApp(),
@@ -43,40 +29,24 @@ export function AppShell({ children }: { children: ReactNode }) {
               Clocked <em>&</em> Paid
             </span>
           </Link>
-          <nav aria-label="Main navigation">
-            {links.map(({ href, label, icon: Icon }) =>
-              ["/tracker", "/history", "/pay", "/jobs", "/settings"].includes(
-                href,
-              ) ? (
-                <Link
-                  key={href}
-                  className={path === href ? "active" : ""}
-                  href={href}
-                  aria-current={path === href ? "page" : undefined}
-                >
-                  <Icon size={17} />
-                  {label}
-                </Link>
-              ) : (
-                <span
-                  key={href}
-                  className="upcoming"
-                  title={`${label} is in the next web phase`}
-                >
-                  <Icon size={17} />
-                  {label}
-                </span>
-              ),
-            )}
-          </nav>
+          <WorkspaceNavigation path={path} />
           <div className="nav-actions">
             <button
-              className="icon-button"
+              className="pay-visibility-toggle"
+              type="button"
+              role="switch"
+              aria-checked={data.payVisible}
               disabled={busy}
-              aria-label={data.payVisible ? "Hide pay" : "Show pay"}
+              aria-label="Show Pay"
+              title={
+                data.payVisible ? "Hide dollar amounts" : "Show dollar amounts"
+              }
               onClick={() => void commit(setPayVisible(!data.payVisible))}
             >
-              {data.payVisible ? <Eye size={19} /> : <EyeOff size={19} />}
+              <span className="pay-visibility-track" aria-hidden="true">
+                <span />
+              </span>
+              <span>Show Pay</span>
             </button>
             <Link
               className="plan-link"
@@ -95,6 +65,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Sparkles size={16} />
               {data.isPremium ? "Premium preview" : "See plans"}
             </Link>
+            <WorkspaceAccount />
           </div>
         </div>
       </header>

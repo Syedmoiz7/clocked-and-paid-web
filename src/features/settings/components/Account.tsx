@@ -1,4 +1,5 @@
 "use client";
+import { User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Field, Panel } from "@/components/Fields";
@@ -54,6 +55,7 @@ export function Account({ unsaved }: { unsaved: boolean }) {
   return (
     <Panel
       title="Account"
+      icon={<User size={16} />}
       subtitle="Local demo account. Guest and mock-account modes share this browser workspace; no server account or email delivery is created."
     >
       {data.account.mode === "guest" ? (
@@ -164,13 +166,13 @@ export function Account({ unsaved }: { unsaved: boolean }) {
           onClose={() => setSignOut(false)}
         >
           <p>
-            This returns to guest mode and retains work, settings and the
-            privacy lock.{" "}
+            This returns to sign-in and retains work, settings and the privacy
+            lock. Unsaved page inputs will be discarded.{" "}
             {unsaved ||
             draft.name !== data.account.name ||
             draft.email !== data.account.email ||
             password
-              ? "There are unsaved inputs. Account drafts will be discarded; unsaved App preferences remain pending."
+              ? "There are unsaved inputs on this page."
               : ""}
           </p>
         </Confirm>

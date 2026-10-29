@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "@/features/public/public.css";
+import "@/components/workspace-chrome.css";
 export const metadata: Metadata = {
   title: "Clocked & Paid",
   description: "Track your time. Know your pay.",

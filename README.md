@@ -28,7 +28,7 @@ npm run test:e2e:review
 npm run test:e2e:all
 ```
 
-Playwright uses the production build on port 3100. `test:e2e` uses installed Google Chrome, `test:e2e:review` runs focused accessibility/keyboard/layout checks across Chrome, Firefox and WebKit, and `test:e2e:all` runs the full suite across those engines. Firefox/WebKit need the browser installation command above. Playwright WebKit does not replace real Safari/device acceptance. If Chrome is unavailable, install Playwright Chromium and change the `channel` setting in `playwright.config.ts` to match your environment. Browser tests use disposable browser contexts; they do not reset a real user workspace. See [engineering acceptance review](../docs/WEB_ACCEPTANCE_REVIEW.md) for findings, coverage and remaining platform checks.
+Playwright uses the production build on port 3100. `test:e2e` uses installed Google Chrome, `test:e2e:review` runs focused accessibility/keyboard/layout checks across Chrome, Firefox and WebKit, and `test:e2e:all` runs the full suite across those engines. Firefox/WebKit need the browser installation command above. Playwright WebKit does not replace real Safari/device acceptance. If Chrome is unavailable, install Playwright Chromium and change the `channel` setting in `playwright.config.ts` to match your environment. Browser tests use disposable browser contexts; they do not reset a real user workspace. See [engineering acceptance review](../docs/WEB_ACCEPTANCE_REVIEW.md) for findings, coverage and remaining platform checks, and [shared UI comparison](../docs/WEB_SHARED_UI_AUDIT.md) for the client-source mapping and approved UX differences.
 
 Production preview: `npm run build` then `npm start`.
 

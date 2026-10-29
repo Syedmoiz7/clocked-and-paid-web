@@ -136,8 +136,8 @@ test("App drafts survive Account tab switches and saved preferences affect Track
     page.getByRole("button", { name: "Next quote", exact: true }),
   ).toHaveCount(0);
   await expect(
-    page.getByRole("button", { name: "Hide pay", exact: true }),
-  ).toBeVisible();
+    page.getByRole("switch", { name: "Show Pay", exact: true }),
+  ).toBeChecked();
   await page.getByRole("tab", { name: "Today's Plan", exact: true }).click();
   await expect(
     page.getByLabel("Custom work hours", { exact: true }),
@@ -147,8 +147,8 @@ test("App drafts survive Account tab switches and saved preferences affect Track
   ).toHaveValue("45");
   await page.reload();
   await expect(
-    page.getByRole("button", { name: "Hide pay", exact: true }),
-  ).toBeVisible();
+    page.getByRole("switch", { name: "Show Pay", exact: true }),
+  ).toBeChecked();
 });
 
 test("draft rebasing keeps another tab's untouched defaults and local changes", async ({
@@ -460,7 +460,7 @@ test("foreign-currency imports retain source prices without changing current pre
   expect(saved.history[0]?.currency).toBe("EUR");
   expect(saved.history[0]?.customRate).toBe(40);
   await nav(page, "History").click();
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await expect(page.locator(".history-entry")).toContainText("€320.00");
 });
 

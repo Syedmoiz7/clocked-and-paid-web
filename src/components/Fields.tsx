@@ -6,6 +6,7 @@ import {
   useEffect,
   useRef,
 } from "react";
+import { X } from "lucide-react";
 export function Field({
   label,
   ...props
@@ -46,16 +47,34 @@ export function Panel({
   title,
   subtitle,
   children,
+  icon,
+  iconTone = "brand",
+  variant = "default",
 }: {
   title: string;
   subtitle?: string;
   children: ReactNode;
+  icon?: ReactNode;
+  iconTone?: "brand" | "cyan" | "blue" | "danger";
+  variant?: "default" | "danger";
 }) {
   return (
-    <section className="card panel">
+    <section
+      className={`card panel${variant === "danger" ? " panel-danger" : ""}`}
+    >
       <header>
-        <h2>{title}</h2>
-        {subtitle && <p>{subtitle}</p>}
+        {icon && (
+          <span
+            className={`panel-icon panel-icon-${iconTone}`}
+            aria-hidden="true"
+          >
+            {icon}
+          </span>
+        )}
+        <div>
+          <h2>{title}</h2>
+          {subtitle && <p>{subtitle}</p>}
+        </div>
       </header>
       <div className="panel-content">{children}</div>
     </section>
@@ -134,7 +153,7 @@ export function Modal({
       <header>
         <h2 id={heading}>{title}</h2>
         <button disabled={busy} onClick={onClose} aria-label="Close dialog">
-          ×
+          <X size={16} aria-hidden="true" />
         </button>
       </header>
       <div className="dialog-content">{children}</div>

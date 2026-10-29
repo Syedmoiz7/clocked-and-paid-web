@@ -41,11 +41,11 @@ async function enter(page: Page, premium = false) {
   await page.waitForLoadState("networkidle");
 }
 async function revealPay(page: Page) {
-  const show = page.getByRole("button", { name: "Show pay", exact: true });
-  if (await show.count()) await show.click();
+  const show = page.getByRole("switch", { name: "Show Pay", exact: true });
+  if (!(await show.isChecked())) await show.click();
   await expect(
-    page.getByRole("button", { name: "Hide pay", exact: true }),
-  ).toBeVisible();
+    page.getByRole("switch", { name: "Show Pay", exact: true }),
+  ).toBeChecked();
 }
 function audit(page: Page, info: TestInfo) {
   const issues: unknown[] = [];

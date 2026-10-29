@@ -51,7 +51,7 @@ async function seed(page: Page, changes: Partial<AppState>) {
   ).toBeVisible();
 }
 async function showPay(page: Page) {
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
 }
 async function premium(page: Page) {
   await page
@@ -108,7 +108,7 @@ test("Free has current-period totals, privacy, a working schedule and return-awa
   await expect(
     page.getByRole("heading", { name: "Current Period Pay" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Hide pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await expect(page.getByTestId("pay-summary")).not.toContainText("$192.00");
 });
 
@@ -481,7 +481,7 @@ test("live accrual is counted once, charts honor privacy and narrow layout", asy
   await expect(page.getByTestId("pay-summary")).not.toContainText(
     "Live pay accruing",
   );
-  await page.getByRole("button", { name: "Hide pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await expect(page.locator(".pay-chart").first()).not.toContainText("$192.00");
   await page.screenshot({
     path: "/private/tmp/clocked-paid-web-pay-desktop.png",

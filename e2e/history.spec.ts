@@ -89,7 +89,7 @@ test("History edits, tips and lunch/break pay persist and update Tracker", async
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/history");
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   const dialog = await addShift(page);
   await dialog.getByLabel("Recorded lunch (minutes)").fill("30");
   await dialog.getByLabel("Unpaid breaks (minutes)").fill("15");
@@ -116,7 +116,7 @@ test("History edits, tips and lunch/break pay persist and update Tracker", async
     page.getByRole("heading", { name: "Work History", exact: true }),
   ).toBeVisible();
   await page.reload();
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await expect(page.locator(".entry-amount>strong")).toHaveText("$211.00");
   await page.locator(".entry-details>summary").click();
   await expect(page.locator(".entry-notes")).toHaveText("Morning shift");
@@ -251,7 +251,7 @@ test("Calendar modes handle project currency, daily selection, yearly breakdown 
 }) => {
   await page.goto("/history");
   await premium(page);
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await page.getByRole("button", { name: "Add project", exact: true }).click();
   const dialog = page.getByRole("dialog");
   await dialog.getByLabel("Start date").fill("2026-10-28");
@@ -569,7 +569,7 @@ test("net/tips views isolate currency ledgers and clear competing earnings optio
       },
     ],
   });
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await page.getByRole("button", { name: "More filters", exact: true }).click();
   await page
     .getByRole("combobox", { name: "Earnings view", exact: true })

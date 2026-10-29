@@ -1,4 +1,5 @@
 "use client";
+import { Lock } from "lucide-react";
 import { useRef, useState } from "react";
 import { Field, Panel } from "@/components/Fields";
 import type { LockType } from "../privacyLogic";
@@ -38,6 +39,7 @@ export function PrivacyCard() {
   return (
     <Panel
       title="Privacy lock"
+      icon={<Lock size={16} />}
       subtitle="Locks on reload and when the page is hidden. This local access gate does not encrypt browser data or exported files."
     >
       <p>

@@ -104,7 +104,7 @@ test("Free edits its profile with validation, privacy and durable defaults", asy
   });
   await expect(card).toContainText("Selected in Tracker");
   await expect(card).toContainText("•••••");
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await expect(card).toContainText("$24.00");
   await card
     .getByRole("button", { name: "Edit Default job", exact: true })
@@ -194,7 +194,7 @@ test("rate edits preserve historical gross and referenced jobs archive without l
   page,
 }) => {
   await seed(page, { isPremium: true, history: [shift()] });
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await page
     .getByRole("button", { name: "Edit Default job", exact: true })
     .click();
@@ -220,7 +220,7 @@ test("rate edits preserve historical gross and referenced jobs archive without l
   expect(saved.jobs[0]?.archived).toBe(true);
   expect(saved.history[0]?.customRate).toBe(24);
   await nav(page, "History").click();
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await expect(page.locator(".history-entry")).toContainText("$192.00");
 });
 
@@ -558,7 +558,7 @@ test("tips enabled in Jobs open the Tracker clock-out form and feed Pay", async 
     .click();
   await expect(dialog).not.toBeVisible();
   await nav(page, "Pay").click();
-  await page.getByRole("button", { name: "Show pay", exact: true }).click();
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
   await expect(page.getByTestId("pay-summary")).toContainText("$34.00");
 });
 

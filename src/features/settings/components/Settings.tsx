@@ -10,6 +10,7 @@ import { PreferenceCards } from "./PreferenceCards";
 import { Appearance, PayPreview } from "./Appearance";
 import { PrivacyCard } from "./PrivacyCard";
 import { DataCards } from "./DataCards";
+import { User, SlidersHorizontal } from "lucide-react";
 
 export function Settings() {
   const data = useApp(),
@@ -109,6 +110,11 @@ export function Settings() {
             }}
             tabIndex={tab === value ? 0 : -1}
           >
+            {value === "account" ? (
+              <User size={14} aria-hidden="true" />
+            ) : (
+              <SlidersHorizontal size={14} aria-hidden="true" />
+            )}
             {value === "account" ? "Account" : "App"}
           </button>
         ))}
