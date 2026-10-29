@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page } from "./helpers/guest";
 import { readFile } from "node:fs/promises";
 import type { AppState, Shift } from "../src/types";
 import { savedState, savedValue, seedState } from "./helpers/workspace";
@@ -262,17 +262,19 @@ test("mock account name/email updates keep separate drafts and password feedback
   page,
 }) => {
   await page
-    .getByRole("button", { name: "Enter mock account", exact: true })
+    .getByRole("link", { name: "Sign in with mock data", exact: true })
     .click();
+  await page.getByLabel("Email", { exact: true }).fill("demo@example.test");
+  await page.getByLabel("Password", { exact: true }).fill("anything");
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+  await page
+    .getByRole("button", {
+      name: "Skip for now — go straight to the app",
+      exact: true,
+    })
+    .click();
+  await nav(page, "Settings").click();
   const dialog = page.getByRole("dialog");
-  await dialog
-    .getByLabel("Mock email", { exact: true })
-    .fill("demo@example.test");
-  await dialog.getByLabel("Mock password", { exact: true }).fill("anything");
-  await dialog
-    .getByRole("button", { name: "Continue with mock data", exact: true })
-    .click();
-  await expect(dialog).not.toBeVisible();
   await page.getByLabel("Display name", { exact: true }).fill("Saleem");
   await page.getByLabel("Email address", { exact: true }).fill("invalid");
   await page.getByRole("button", { name: "Update name", exact: true }).click();
@@ -324,7 +326,7 @@ test("mock account name/email updates keep separate drafts and password feedback
     .click();
   await dialog.getByRole("button", { name: "Sign out", exact: true }).click();
   await expect(
-    page.getByRole("button", { name: "Enter mock account", exact: true }),
+    page.getByRole("button", { name: "Continue as Guest", exact: true }),
   ).toBeVisible();
 });
 
@@ -713,7 +715,7 @@ test("emergency recovery preserves unreadable raw data and restores validated bu
     .getByRole("button", { name: "Restore recovery copy", exact: true })
     .click();
   await expect(
-    page.getByRole("heading", { name: "Settings", exact: true }),
+    page.getByRole("button", { name: "Continue as Guest", exact: true }),
   ).toBeVisible();
   expect((await savedState(page)).history).toHaveLength(1);
   expect((await savedState(page)).isPremium).toBe(false);

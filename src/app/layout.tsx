@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { WorkspaceProvider } from "@/components/WorkspaceProvider";
 import { PrivacyProvider } from "@/features/settings/components/PrivacyProvider";
+import { AuthGate } from "@/features/auth/components/AuthGate";
 import "./globals.css";
 export const metadata: Metadata = {
   title: "Clocked & Paid",
@@ -16,7 +17,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <PrivacyProvider>
-          <WorkspaceProvider>{children}</WorkspaceProvider>
+          <WorkspaceProvider>
+            <AuthGate>{children}</AuthGate>
+          </WorkspaceProvider>
         </PrivacyProvider>
       </body>
     </html>

@@ -11,7 +11,7 @@ import {
 import { Provider, useSelector } from "react-redux";
 import { makeStore, replaceWorkspace, type AppStore } from "@/lib/store";
 import { workspaceRepository, type WorkspaceCommand } from "@/lib/workspace";
-import { enterGuest, refreshTrackerDay } from "@/store/appSlice";
+import { hydrate, initialAppState, refreshTrackerDay } from "@/store/appSlice";
 import { localDate } from "@/utils/dateOnly";
 import type { AppState } from "@/types";
 import { EmergencyRecovery } from "@/features/settings/components/EmergencyRecovery";
@@ -75,7 +75,8 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       .load()
       .then(async (loaded) => {
         const saved =
-          loaded ?? (await workspaceRepository.commit(enterGuest(), read()));
+          loaded ??
+          (await workspaceRepository.commit(hydrate(initialAppState), read()));
         if (!active) return;
         if (saved) {
           store.dispatch(replaceWorkspace(saved.state));

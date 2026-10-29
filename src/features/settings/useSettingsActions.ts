@@ -5,7 +5,6 @@ import {
   setThemeHue,
   setMockAccount,
   signOutMockSession,
-  enterMockSession,
   restoreData,
   resetLocalData,
 } from "@/store/appSlice";
@@ -67,14 +66,6 @@ export function useSettingsActions() {
         if (result.error) throw new Error(result.error);
         return setMockAccount(result.account!);
       }),
-    signIn: (name: string, email: string) =>
-      save(
-        enterMockSession({
-          mode: "mock",
-          name: name.trim() || "Demo user",
-          email: email.trim(),
-        }),
-      ),
     signOut: () => save(signOutMockSession()),
     password: async (value: string, confirmation: string) => {
       const error = validatePassword(value, confirmation);

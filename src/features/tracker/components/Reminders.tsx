@@ -34,21 +34,29 @@ export function ReminderHost({ now }: { now: number }) {
     delivered.add(deliveryKey);
     if (delivered.size > 500)
       delivered.delete(delivered.values().next().value!);
-    if (alert.settings.sound && !privacy.locked) playReminderSound();
+    if (
+      alert.settings.sound &&
+      !privacy.locked &&
+      data.auth.session !== "signed-out"
+    )
+      playReminderSound();
     if (
       typeof Notification !== "undefined" &&
       Notification.permission === "granted"
     ) {
       try {
         new Notification(
-          privacy.configured ? "Clocked & Paid reminder" : alert.name,
+          privacy.configured || data.auth.session === "signed-out"
+            ? "Clocked & Paid reminder"
+            : alert.name,
           {
-            body: privacy.configured
-              ? "Open your workspace to view this reminder."
-              : alert.message,
+            body:
+              privacy.configured || data.auth.session === "signed-out"
+                ? "Open your workspace to view this reminder."
+                : alert.message,
             icon: "/branding/icon.png",
             tag: alert.key,
-            silent: !alert.settings.sound,
+            silent: !alert.settings.sound || data.auth.session === "signed-out",
           },
         );
       } catch {
@@ -57,7 +65,12 @@ export function ReminderHost({ now }: { now: number }) {
     }
   }, [deliveryKey]);
   useEffect(() => {
-    if (!alert?.settings.indicator || privacy.locked) return;
+    if (
+      !alert?.settings.indicator ||
+      privacy.locked ||
+      data.auth.session === "signed-out"
+    )
+      return;
     const previous = document.title;
     document.documentElement.dataset.reminderTitle = "active";
     let visible = true;
@@ -72,8 +85,14 @@ export function ReminderHost({ now }: { now: number }) {
       delete document.documentElement.dataset.reminderTitle;
       document.title = previous;
     };
-  }, [alert?.key, alert?.settings.indicator, privacy.locked]);
-  if (!alert || privacy.locked) return null;
+  }, [
+    alert?.key,
+    alert?.settings.indicator,
+    privacy.locked,
+    data.auth.session,
+  ]);
+  if (!alert || privacy.locked || data.auth.session === "signed-out")
+    return null;
   const acknowledge = async (snooze: boolean) => {
     const delay = snooze ? alert.settings.snoozeMinutes : alert.repeatMinutes;
     await commit(

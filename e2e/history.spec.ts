@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page } from "./helpers/guest";
 import { readFile } from "node:fs/promises";
 import type { AppState, Shift } from "../src/types";
 test.use({ timezoneId: "Asia/Karachi" });

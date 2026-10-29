@@ -1,11 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Field, Modal, Panel } from "@/components/Fields";
-import {
-  Confirm,
-  FormFooter,
-  usePayForm,
-} from "@/features/pay/components/Shared";
+import Link from "next/link";
+import { Field, Panel } from "@/components/Fields";
+import { Confirm } from "@/features/pay/components/Shared";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
 import { rebaseAccountDraft } from "../model";
 import { useSettingsActions } from "../useSettingsActions";
@@ -21,8 +18,7 @@ export function Account({ unsaved }: { unsaved: boolean }) {
     [message, setMessage] = useState<Record<string, string>>({}),
     [operation, setOperation] = useState(""),
     pending = useRef(false);
-  const [signIn, setSignIn] = useState(false),
-    [signOut, setSignOut] = useState(false);
+  const [signOut, setSignOut] = useState(false);
   useEffect(() => {
     const old = previous.current;
     previous.current = data.account;
@@ -67,9 +63,9 @@ export function Account({ unsaved }: { unsaved: boolean }) {
             Your work is saved in this browser. Enter mock account data to
             preview profile controls.
           </p>
-          <button className="primary" onClick={() => setSignIn(true)}>
-            Enter mock account
-          </button>
+          <Link className="button-link primary" href="/auth">
+            Sign in with mock data
+          </Link>
         </div>
       ) : (
         <>
@@ -160,12 +156,6 @@ export function Account({ unsaved }: { unsaved: boolean }) {
           </button>
         </>
       )}
-      {signIn && (
-        <MockAccountEntry
-          onClose={() => setSignIn(false)}
-          onSave={actions.signIn}
-        />
-      )}
       {signOut && (
         <Confirm
           title="Sign out?"
@@ -186,57 +176,5 @@ export function Account({ unsaved }: { unsaved: boolean }) {
         </Confirm>
       )}
     </Panel>
-  );
-}
-function MockAccountEntry({
-  onSave,
-  onClose,
-}: {
-  onSave: (name: string, email: string) => Promise<string | null>;
-  onClose: () => void;
-}) {
-  const [name, setName] = useState(""),
-    [email, setEmail] = useState(""),
-    [password, setPassword] = useState("");
-  const form = usePayForm(
-    () =>
-      email.trim() && password.trim()
-        ? onSave(name, email)
-        : Promise.resolve("Enter any non-empty mock email and password."),
-    onClose,
-  );
-  return (
-    <Modal title="Enter mock account" busy={form.saving} onClose={onClose}>
-      <form onSubmit={form.submit} noValidate>
-        <fieldset disabled={form.saving}>
-          <p>
-            Local preview only. This does not contact a backend or create a real
-            account.
-          </p>
-          <Field
-            label="Mock display name (optional)"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-          <Field
-            label="Mock email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <Field
-            label="Mock password"
-            type="password"
-            autoComplete="off"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </fieldset>
-        <FormFooter
-          {...form}
-          label="Continue with mock data"
-          onClose={onClose}
-        />
-      </form>
-    </Modal>
   );
 }

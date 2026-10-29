@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./helpers/guest";
 
 test("manual times persist and clock-out keeps saved work in Today's Summary", async ({
   page,

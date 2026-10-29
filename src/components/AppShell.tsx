@@ -13,8 +13,6 @@ import {
 } from "lucide-react";
 import { useApp, useWorkspace } from "./WorkspaceProvider";
 import { setPayVisible } from "@/store/appSlice";
-import { GlobalReminderHost } from "@/features/tracker/components/Reminders";
-import { BrowserTabTime } from "./BrowserTabTime";
 import type { ReactNode, CSSProperties } from "react";
 
 const links = [
@@ -100,12 +98,14 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
       <main id="main" className="page">
-        <BrowserTabTime />
-        <GlobalReminderHost />
         {children}
       </main>
       <footer className="site-footer">
-        Clocked & Paid <span>Guest workspace · saved in this browser</span>
+        Clocked & Paid{" "}
+        <span>
+          {data.auth.session === "mock" ? "Mock account" : "Guest workspace"} ·
+          saved in this browser
+        </span>
       </footer>
       {message && (
         <div role="status" className="toast">

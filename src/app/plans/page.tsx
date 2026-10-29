@@ -1,11 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Check, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
 import { setPremiumPreview } from "@/store/appSlice";
 import { useEffect, useState } from "react";
+import { planOptions } from "@/features/auth/components/PlanCards";
+import { planReturn } from "@/features/auth/routing";
 export default function Plans() {
   const data = useApp(),
     { commit, busy } = useWorkspace(),
@@ -13,17 +15,7 @@ export default function Plans() {
   const [returnTo, setReturnTo] = useState("/tracker");
   useEffect(() => {
     const target = new URLSearchParams(window.location.search).get("returnTo");
-    setReturnTo(
-      target === "history"
-        ? "/history"
-        : target === "pay"
-          ? "/pay"
-          : target === "jobs"
-            ? "/jobs"
-            : target === "settings"
-              ? "/settings"
-              : "/tracker",
-    );
+    setReturnTo(planReturn(target));
   }, []);
   const choose = async (premium: boolean) => {
     if (await commit(setPremiumPreview(premium))) router.push(returnTo);
@@ -46,7 +38,9 @@ export default function Plans() {
                 ? "Jobs"
                 : returnTo === "/settings"
                   ? "Settings"
-                  : "Tracker"}{" "}
+                  : returnTo.startsWith("/onboarding")
+                    ? "Setup"
+                    : "Tracker"}{" "}
           →
         </Link>
       </div>
@@ -60,12 +54,7 @@ export default function Plans() {
           <h2>Free</h2>
           <p>Ad-supported</p>
           <ul>
-            {[
-              "Clock in/out, live timer and Today's Summary",
-              "One job with lunch, breaks and basic reminders",
-              "Current-month History and current-period Pay",
-              "12/24-hour clock and basic theme",
-            ].map((item) => (
+            {planOptions[0].features.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
@@ -81,13 +70,7 @@ export default function Plans() {
           <h2>Premium</h2>
           <p>Ads removed</p>
           <ul>
-            {[
-              "Multiple jobs and per-job pay settings",
-              "Hours Calculator",
-              "Full History, Calendar and export",
-              "Advanced Pay, trends, deductions and estimator",
-              "Backup, recovery and full theme palette",
-            ].map((item) => (
+            {planOptions[1].features.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>

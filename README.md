@@ -1,6 +1,6 @@
 # Clocked & Paid web
 
-Next.js App Router app, beside `mobile/` and `backend/`. The client source provides visual references; the reviewed mobile models supply calculation and state behavior. Tracker, History/Calendar, Pay, Jobs and Settings are implemented for review, not the full web product. See [web scope](../docs/WEB_SCOPE.md), [parity/status](../docs/WEB_PARITY.md), [History details](../docs/WEB_HISTORY_PARITY.md), [Pay details](../docs/WEB_PAY_PARITY.md), [Jobs details](../docs/WEB_JOBS_PARITY.md) and [Settings details](../docs/WEB_SETTINGS_PARITY.md).
+Next.js App Router app, beside `mobile/` and `backend/`. The client source provides visual references; the reviewed mobile models supply calculation and state behavior. Tracker, History/Calendar, Pay, Jobs, Settings and mock auth/onboarding are implemented for review, not the full web product. See [web scope](../docs/WEB_SCOPE.md), [parity/status](../docs/WEB_PARITY.md), [History details](../docs/WEB_HISTORY_PARITY.md), [Pay details](../docs/WEB_PAY_PARITY.md), [Jobs details](../docs/WEB_JOBS_PARITY.md) and [Settings details](../docs/WEB_SETTINGS_PARITY.md) and [auth/setup details](../docs/WEB_AUTH_ONBOARDING_PARITY.md).
 
 ## Run
 
@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`. `/` opens `/tracker`; History is at `/history`, Pay at `/pay`, Jobs at `/jobs`, and Settings at `/settings`. No backend, API keys, environment file or sign-in is required for guest tracking. Dedicated mock auth/onboarding and landing/legal flows are subsequent phases. Settings already has local guest/mock-account controls.
+Open `http://localhost:3000`. `/` opens `/auth` for a new or signed-out workspace, `/onboarding` for incomplete mock setup, or `/tracker` for a returning guest/completed mock session; History is at `/history`, Pay at `/pay`, Jobs at `/jobs`, and Settings at `/settings`. No backend, API keys, environment file or sign-in is required for guest tracking. Use Continue as Guest, or enter any non-empty mock email/password. Signup includes Free/Premium selection and a local confirmation link; recovery and job onboarding are also functional local previews. Landing/legal/contact screens remain W5 work.
 
 ## Verify
 

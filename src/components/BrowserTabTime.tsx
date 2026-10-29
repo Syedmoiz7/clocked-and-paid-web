@@ -16,7 +16,8 @@ export function BrowserTabTime() {
         return;
       }
       if (document.documentElement.dataset.reminderTitle) return;
-      const shift = data.activeShift,
+      const shift =
+          data.auth.session === "signed-out" ? null : data.activeShift,
         mode = data.preferences.headerTimerMode;
       if (!shift || mode === "off") {
         const label = (
@@ -52,6 +53,7 @@ export function BrowserTabTime() {
     data.activeShift,
     data.todayPlan,
     data.preferences.headerTimerMode,
+    data.auth.session,
     privacy.locked,
     path,
   ]);
