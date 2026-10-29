@@ -1,6 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
-import { ChevronRight, Quote, History, Pencil } from "lucide-react";
+import {
+  ChevronRight,
+  ChevronLeft,
+  Quote,
+  History,
+  Pencil,
+  SlidersHorizontal,
+  Bell,
+  CalendarClock,
+  Clock,
+} from "lucide-react";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
 import { Modal, Panel, Field } from "@/components/Fields";
 import { clockIn, clockOut, clockOutExtraShift } from "@/store/appSlice";
@@ -147,7 +157,7 @@ export function Tracker() {
     } else void finish(id);
   };
   const status = !shift
-    ? "Off the clock"
+    ? "Off Duty"
     : shift.lunchStartedAt
       ? "On lunch"
       : shift.breakStartedAt
@@ -155,40 +165,50 @@ export function Tracker() {
         : "Working";
   const editShift = data.history.find((entry) => entry.id === editing);
   return (
-    <>
-      <div className="page-heading">
-        <div>
-          <h1>Today&apos;s Shift</h1>
-          <p>
-            {new Date(now).toLocaleDateString("en-US", {
-              weekday: "long",
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </p>
-        </div>
-        <span
-          className={`badge ${shift ? (shift.lunchStartedAt || shift.breakStartedAt ? "paused" : "working") : ""}`}
-        >
-          ● {status}
-        </span>
-      </div>
-      {data.preferences.showDailyQuote && (
-        <aside className="quote">
-          <Quote size={19} />
+    <div className="tracker-page">
+      <header className="tracker-heading">
+        <div className="page-heading">
           <div>
-            <p>{quote.text}</p>
-            <small>— {quote.author}</small>
+            <h1>Today&apos;s Shift</h1>
+            <p>
+              {new Date(now).toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </p>
           </div>
-          <button
-            aria-label="Next quote"
-            onClick={() => setQuoteOffset((value) => value + 1)}
+          <span
+            className={`badge ${shift ? (shift.lunchStartedAt ? "on-lunch" : shift.breakStartedAt ? "on-break" : "working") : ""}`}
           >
-            <ChevronRight size={18} />
-          </button>
-        </aside>
-      )}
+            ● {status}
+          </span>
+        </div>
+        {data.preferences.showDailyQuote && (
+          <aside className="quote">
+            <Quote size={16} aria-hidden="true" />
+            <div>
+              <p>{quote.text}</p>
+              <small>— {quote.author}</small>
+            </div>
+            <div className="quote-navigation">
+              <button
+                aria-label="Previous quote"
+                onClick={() => setQuoteOffset((value) => value - 1)}
+              >
+                <ChevronLeft size={14} aria-hidden="true" />
+              </button>
+              <button
+                aria-label="Next quote"
+                onClick={() => setQuoteOffset((value) => value + 1)}
+              >
+                <ChevronRight size={14} aria-hidden="true" />
+              </button>
+            </div>
+          </aside>
+        )}
+      </header>
       {data.orphanedShift && <Recovery />}
       <ShiftClock now={now} begin={begin} requestFinish={requestFinish} />
       <ShiftProgress now={now} />
@@ -233,6 +253,7 @@ export function Tracker() {
       >
         <Panel
           title={`Completed Today (${completed.length})`}
+          icon={<Clock size={16} />}
           subtitle="Saved shifts and time corrections"
         >
           {!completed.length ? (
@@ -243,8 +264,8 @@ export function Tracker() {
             </div>
           ) : (
             completed.map((entry) => (
-              <div className="shift-row" key={entry.id}>
-                <div>
+              <div className="shift-row completed-shift-row" key={entry.id}>
+                <div className="completed-shift-details">
                   <h3>
                     {data.jobs.find((item) => item.id === entry.jobId)?.name ??
                       "Unassigned job"}
@@ -254,10 +275,11 @@ export function Tracker() {
                     {formatDuration(workedMinutes(entry) * 60)}
                   </p>
                   <small>
-                    {entry.lunchMinutes}m lunch · {entry.breakMinutes}m breaks
+                    {formatDuration(entry.lunchMinutes * 60)} lunch ·{" "}
+                    {formatDuration(entry.breakMinutes * 60)} breaks
                   </small>
                 </div>
-                <strong>
+                <strong className="completed-shift-pay mono">
                   {fmt(
                     completedShiftTotals(
                       entry,
@@ -287,6 +309,7 @@ export function Tracker() {
         >
           <Panel
             title={shift ? "Manual Adjustments" : "Enter Today's Times"}
+            icon={<Pencil size={16} />}
             subtitle="Clock-in, lunch and clock-out corrections"
           >
             <ManualTimesForm key={shift?.id ?? "new"} shift={shift} />
@@ -301,6 +324,7 @@ export function Tracker() {
       >
         <Panel
           title="Today's Plan"
+          icon={<SlidersHorizontal size={16} />}
           subtitle={`${data.todayPlan.plannedHours.toFixed(2).replace(/\.00$/, "")}h work · ${data.todayPlan.lunchEnabled ? `${data.todayPlan.lunchMinutes}m lunch` : "no lunch"}`}
         >
           <TodayPlan />
@@ -312,7 +336,11 @@ export function Tracker() {
         aria-labelledby="tab-reminders"
         hidden={section !== "reminders"}
       >
-        <Panel title="Reminders" subtitle="Lunch and return-to-work alerts">
+        <Panel
+          title="Reminders"
+          icon={<Bell size={16} />}
+          subtitle="Lunch and return-to-work alerts"
+        >
           <Reminders />
         </Panel>
       </div>
@@ -324,6 +352,7 @@ export function Tracker() {
       >
         <Panel
           title="Hours Calculator"
+          icon={<CalendarClock size={16} />}
           subtitle="Calculate pay from manual times or paid hours"
         >
           <Calculator />
@@ -383,6 +412,6 @@ export function Tracker() {
           </form>
         </Modal>
       )}
-    </>
+    </div>
   );
 }

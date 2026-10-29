@@ -1,4 +1,61 @@
 import { test, expect } from "./helpers/guest";
+import AxeBuilder from "@axe-core/playwright";
+
+test("clock actions follow working, lunch and break states without losing completed pay", async ({
+  page,
+}, info) => {
+  await page.goto("/tracker");
+  const clock = page.getByRole("region", { name: "Shift clock" });
+  await expect(clock).toContainText("Ready to start your shift");
+  const quote = await page.locator(".quote p").innerText();
+  await page.getByRole("button", { name: "Next quote", exact: true }).click();
+  await expect(page.locator(".quote p")).not.toHaveText(quote);
+  await page
+    .getByRole("button", { name: "Previous quote", exact: true })
+    .click();
+  await expect(page.locator(".quote p")).toHaveText(quote);
+  await page.getByRole("switch", { name: "Show Pay", exact: true }).click();
+  await clock.getByRole("button", { name: "Clock in", exact: true }).click();
+  await page.clock.setFixedTime(new Date("2026-10-28T13:00:00+05:00"));
+  await expect(page.locator(".summary-amount")).toHaveText("$24.00");
+  await page.screenshot({
+    path: info.outputPath("tracker-working.png"),
+    fullPage: true,
+  });
+  await clock.getByRole("button", { name: "Start lunch", exact: true }).click();
+  await expect(
+    clock.getByRole("button", { name: "End lunch", exact: true }),
+  ).toBeVisible();
+  await page.clock.setFixedTime(new Date("2026-10-28T13:30:00+05:00"));
+  await expect(page.locator(".summary-amount")).toHaveText("$24.00");
+  await clock.getByRole("button", { name: "End lunch", exact: true }).click();
+  await clock.getByLabel("Break label (optional)").fill("Coffee");
+  await clock.getByRole("button", { name: "Take break", exact: true }).click();
+  await expect(clock).toContainText("Coffee");
+  await expect(
+    clock.getByRole("button", { name: "End break", exact: true }),
+  ).toBeVisible();
+  await page.clock.setFixedTime(new Date("2026-10-28T13:45:00+05:00"));
+  await expect(page.locator(".summary-amount")).toHaveText("$24.00");
+  const accessibility = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+    .analyze();
+  expect(accessibility.violations).toEqual([]);
+  await page.screenshot({
+    path: info.outputPath("tracker-break.png"),
+    fullPage: true,
+  });
+  await clock.getByRole("button", { name: "End break", exact: true }).click();
+  await clock.getByRole("button", { name: "Start lunch", exact: true }).click();
+  await clock.getByRole("button", { name: "Clock out", exact: true }).click();
+  await expect(
+    page.getByRole("tab", { name: "Completed Today (1)", exact: true }),
+  ).toBeVisible();
+  await expect(page.locator(".summary-amount")).toHaveText("$24.00");
+  await expect(
+    clock.getByRole("button", { name: "Clock in", exact: true }),
+  ).toBeVisible();
+});
 
 test("manual times persist and clock-out keeps saved work in Today's Summary", async ({
   page,

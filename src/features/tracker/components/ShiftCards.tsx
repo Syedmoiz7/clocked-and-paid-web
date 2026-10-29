@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { LogIn, Square, Utensils, Coffee, TrendingUp } from "lucide-react";
+import { LogIn, Square, Utensils, TrendingUp, Play, Pause } from "lucide-react";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
 import { Field, Toggle } from "@/components/Fields";
 import {
@@ -15,8 +15,9 @@ import {
 } from "@/store/appSlice";
 import { formatDuration, trackerMetrics, withPlanRates } from "../model";
 import { jobPlan } from "@/features/jobs/model";
-import { money, workedMinutes } from "@/features/history/model";
+import { money, workedMinutes, wagesFor } from "@/features/history/model";
 import { newShift } from "./ManualTimesForm";
+import { localDate } from "@/utils/dateOnly";
 function useDisplay(now: number) {
   const data = useApp(),
     { busy, commit } = useWorkspace(),
@@ -61,8 +62,74 @@ export function ShiftClock({
           ? Math.abs((metrics.projected ?? now) - now) / 1000
           : metrics.worked
         : 0;
+  const paused = shift?.lunchStartedAt
+    ? "lunch"
+    : shift?.breakStartedAt
+      ? "break"
+      : null;
+  const changeLunch = () =>
+    void commit(
+      shift?.lunchStartedAt
+        ? endLunch(new Date().toISOString())
+        : startLunch(new Date().toISOString()),
+    );
+  const changeBreak = () =>
+    void commit(
+      shift?.breakStartedAt
+        ? endBreak(new Date().toISOString())
+        : startBreak({
+            at: new Date().toISOString(),
+            label: breakLabel.trim() || "General break",
+          }),
+    );
+  const primaryLabel = !shift
+    ? "Clock in"
+    : paused === "lunch"
+      ? "End lunch"
+      : paused === "break"
+        ? "End break"
+        : "Clock out";
+  const PrimaryIcon = !shift ? LogIn : paused ? Play : Square;
+  const soFar = shift
+    ? wagesFor(
+        withPlanRates(shift, data.todayPlan),
+        data.jobs,
+        data.defaultPlan,
+        now,
+      )
+    : 0;
+  const timerMode = (
+    <div
+      className="chips timer-mode"
+      role="group"
+      aria-label="Shift timer direction"
+    >
+      {(["count-up", "count-down"] as const).map((mode) => (
+        <button
+          key={mode}
+          disabled={busy}
+          aria-pressed={data.todayPlan.timerDirection === mode}
+          onClick={() => void commit(updateTodayPlan({ timerDirection: mode }))}
+        >
+          {mode === "count-up" ? "Count up" : "Count down"}
+        </button>
+      ))}
+    </div>
+  );
   return (
-    <section className="card hero" aria-label="Shift clock">
+    <section
+      className={`card hero tracker-clock ${shift ? "is-active" : "is-idle"}${paused ? ` is-${paused}` : ""}`}
+      aria-label="Shift clock"
+    >
+      {!shift && (
+        <p className="clock-ready">
+          {data.history.some(
+            (entry) => entry.date === localDate(new Date(now)) && entry.endedAt,
+          )
+            ? "Shift complete — ready for another?"
+            : "Ready to start your shift"}
+        </p>
+      )}
       {data.jobs.filter((item) => !item.archived).length > 1 && (
         <label className="job-select">
           <span>Job for this shift</span>
@@ -71,7 +138,7 @@ export function ShiftClock({
               busy || Boolean(shift) || Boolean(data.extraShifts.length)
             }
             value={data.selectedJobId}
-            onChange={(e) => void commit(selectJob(e.target.value))}
+            onChange={(event) => void commit(selectJob(event.target.value))}
           >
             {data.jobs
               .filter((item) => !item.archived)
@@ -83,108 +150,97 @@ export function ShiftClock({
           </select>
         </label>
       )}
-      <div className="eyebrow">
-        {shift?.breakStartedAt
-          ? "Unpaid break"
-          : shift?.lunchStartedAt
-            ? "Lunch break"
-            : !shift
-              ? "Ready when you are"
-              : countdown
-                ? (metrics.projected ?? now) < now
-                  ? "Past estimated finish"
-                  : "Until estimated finish"
-                : "Time worked"}
-      </div>
-      <div className={`timer mono ${shift ? "active" : ""}`}>
-        {formatDuration(seconds)}
-      </div>
-      <p>
-        {job?.name ?? "No job selected"} <span className="dot">·</span>{" "}
-        {fmt(data.todayPlan.hourlyRate)}/hr{" "}
-        {shift
-          ? `· Clocked in at ${time(shift.startedAt)}`
-          : "· Your time, accounted for."}
-      </p>
-      <div className="chips timer-mode">
-        {(["count-up", "count-down"] as const).map((mode) => (
-          <button
-            key={mode}
-            disabled={busy}
-            aria-pressed={data.todayPlan.timerDirection === mode}
-            onClick={() =>
-              void commit(updateTodayPlan({ timerDirection: mode }))
-            }
-          >
-            {mode === "count-up" ? "Count up" : "Count down"}
-          </button>
-        ))}
-      </div>
-      <div className="actions">
-        {!shift ? (
-          <button
-            className="primary clock-button"
-            disabled={busy || Boolean(data.orphanedShift)}
-            onClick={() => void begin()}
-          >
-            <LogIn size={19} />
-            Clock in
-          </button>
-        ) : (
-          <>
+      {shift && timerMode}
+      {shift && (
+        <div className="clock-reading">
+          <div className="eyebrow">
+            {paused && <Pause size={13} aria-hidden="true" />}
+            {paused === "break"
+              ? "On break"
+              : paused === "lunch"
+                ? "On lunch"
+                : countdown
+                  ? (metrics.projected ?? now) < now
+                    ? "Past planned end"
+                    : "Time remaining"
+                  : "Time working"}
+          </div>
+          <div className="timer mono active" aria-live="off">
+            {formatDuration(seconds)}
+          </div>
+          {!paused && data.payVisible && (
+            <p className="clock-earnings">~{fmt(soFar)} so far</p>
+          )}
+          <p className="clock-meta">
+            {job?.name ?? "No job selected"} · Clocked in at{" "}
+            {time(shift.startedAt)}
+          </p>
+          {paused === "break" && shift.breakLabel && (
+            <p className="clock-meta">{shift.breakLabel}</p>
+          )}
+        </div>
+      )}
+      <button
+        type="button"
+        className={`clock-button clock-primary ${!shift ? "primary" : paused ? `resume-${paused}` : "clock-stop"}`}
+        disabled={busy || (!shift && Boolean(data.orphanedShift))}
+        onClick={() => {
+          if (!shift) void begin();
+          else if (paused === "lunch") changeLunch();
+          else if (paused === "break") changeBreak();
+          else requestFinish(shift.id);
+        }}
+      >
+        <span>
+          <PrimaryIcon size={20} aria-hidden="true" />
+          {primaryLabel}
+        </span>
+        {shift && !paused && metrics.projected && (
+          <small aria-hidden="true">
+            Estimated finish {time(metrics.projected)}
+          </small>
+        )}
+      </button>
+      {!shift && timerMode}
+      {shift && (
+        <div className="actions clock-secondary">
+          {paused ? (
             <button
-              className="clock-button danger"
+              className="danger"
               disabled={busy}
               onClick={() => requestFinish(shift.id)}
             >
-              <Square size={17} />
+              <Square size={15} aria-hidden="true" />
               Clock out
             </button>
-            <button
-              disabled={busy || Boolean(shift.breakStartedAt)}
-              onClick={() =>
-                void commit(
-                  shift.lunchStartedAt
-                    ? endLunch(new Date().toISOString())
-                    : startLunch(new Date().toISOString()),
-                )
-              }
-            >
-              <Utensils size={16} />{" "}
-              {shift.lunchStartedAt ? "End lunch" : "Start lunch"}
-            </button>
-            <button
-              disabled={busy || Boolean(shift.lunchStartedAt)}
-              onClick={() =>
-                void commit(
-                  shift.breakStartedAt
-                    ? endBreak(new Date().toISOString())
-                    : startBreak({
-                        at: new Date().toISOString(),
-                        label: breakLabel.trim() || "General break",
-                      }),
-                )
-              }
-            >
-              <Coffee size={16} />{" "}
-              {shift.breakStartedAt ? "End break" : "Take break"}
-            </button>
-          </>
-        )}
-      </div>
-      {shift && !shift.breakStartedAt && (
+          ) : (
+            <>
+              <button disabled={busy} onClick={changeLunch}>
+                <Utensils size={15} aria-hidden="true" />
+                Start lunch
+              </button>
+              <button disabled={busy} onClick={changeBreak}>
+                <Pause size={15} aria-hidden="true" />
+                Take break
+              </button>
+            </>
+          )}
+        </div>
+      )}
+      {shift && !paused && (
         <div className="break-label">
           <Field
             label="Break label (optional)"
             value={breakLabel}
             placeholder="General break"
-            onChange={(e) => setBreakLabel(e.target.value)}
+            onChange={(event) => setBreakLabel(event.target.value)}
           />
         </div>
       )}
     </section>
   );
 }
+
 export function ShiftProgress({ now }: { now: number }) {
   const { data, busy, commit, shift, metrics, time } = useDisplay(now);
   return (

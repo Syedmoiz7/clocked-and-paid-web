@@ -1,0 +1,296 @@
+.tracker-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.tracker-heading {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.tracker-heading .page-heading {
+  margin-bottom: 0;
+}
+.tracker-heading h1 {
+  font-size: 24px;
+  font-weight: 900;
+}
+.tracker-heading .quote {
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  border: 1px solid color-mix(in srgb, var(--pink) 18%, transparent);
+  background: color-mix(in srgb, var(--pink) 5%, transparent);
+}
+.tracker-heading .quote > svg {
+  flex-shrink: 0;
+  color: var(--pink);
+}
+.tracker-heading .quote p {
+  font-size: 14px;
+  font-style: italic;
+  color: var(--muted);
+}
+.quote-navigation {
+  display: flex;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.tracker-heading .quote-navigation button {
+  margin: 0;
+}
+.tracker-page .card {
+  border-radius: 16px;
+}
+.tracker-page .tracker-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 24px;
+  background: linear-gradient(
+    150deg,
+    hsl(var(--brand-h) 18% 10%),
+    hsl(var(--brand-h) 18% 7%)
+  );
+}
+.tracker-clock .clock-ready {
+  margin: 0;
+  color: var(--muted);
+}
+.tracker-clock .timer-mode {
+  margin: 0;
+}
+.tracker-heading .badge.working {
+  color: var(--pink);
+  background: var(--soft);
+  border-color: color-mix(in srgb, var(--pink) 30%, transparent);
+}
+.tracker-heading .badge.on-lunch {
+  color: var(--yellow);
+  background: #e8ae5a15;
+  border-color: #e8ae5a44;
+}
+.tracker-heading .badge.on-break {
+  color: #83cfee;
+  background: #83cfee15;
+  border-color: #83cfee44;
+}
+.tracker-clock .clock-reading {
+  width: 100%;
+}
+.tracker-clock .eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.tracker-clock .timer {
+  font-size: clamp(40px, 7vw, 60px);
+  margin: 8px 0;
+  letter-spacing: -2px;
+}
+.tracker-clock .clock-earnings {
+  color: var(--pink);
+  margin: 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+.tracker-clock .clock-meta {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 8px 0 0;
+}
+.tracker-clock .clock-primary {
+  width: 100%;
+  max-width: 320px;
+  min-width: 0;
+  min-height: 64px;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.tracker-clock .clock-primary > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: capitalize;
+}
+.tracker-clock .clock-primary small {
+  color: inherit;
+  font-size: 11px;
+  font-weight: 400;
+}
+.tracker-clock .clock-stop {
+  background: linear-gradient(135deg, hsl(0 65% 42%), hsl(0 65% 34%));
+  color: white;
+  border-color: hsl(0 65% 42%);
+}
+.tracker-clock .resume-lunch {
+  background: linear-gradient(135deg, hsl(35 80% 32%), hsl(35 80% 25%));
+  color: white;
+  border-color: hsl(35 80% 32%);
+}
+.tracker-clock .resume-break {
+  background: linear-gradient(135deg, hsl(185 75% 28%), hsl(185 75% 22%));
+  color: white;
+  border-color: hsl(185 75% 28%);
+}
+.tracker-clock.is-lunch .timer,
+.tracker-clock.is-lunch .eyebrow {
+  color: var(--yellow);
+}
+.tracker-clock.is-break .timer,
+.tracker-clock.is-break .eyebrow {
+  color: #67d8de;
+}
+.tracker-clock .clock-secondary {
+  margin: 0;
+}
+.tracker-clock .break-label {
+  width: min(100%, 320px);
+  text-align: left;
+}
+.tracker-page .progress-card,
+.tracker-page .summary {
+  margin-top: 0;
+}
+.tracker-page .tracker-summary {
+  padding: 20px 24px;
+  background: linear-gradient(
+    145deg,
+    hsl(var(--brand-h) 18% 9%),
+    hsl(var(--brand-h) 18% 7%)
+  );
+}
+.summary-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.summary-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.summary-title h2 {
+  font-size: 14px;
+  margin: 0 0 4px;
+}
+.summary-pay {
+  text-align: right;
+}
+.summary-mode {
+  justify-content: flex-end;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+}
+.summary-mode button {
+  min-height: 30px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+}
+.tracker-summary .summary-amount {
+  font-size: clamp(32px, 5vw, 48px);
+  letter-spacing: -1.5px;
+  margin: 8px 0 0;
+  line-height: 1.2;
+}
+.tracker-summary .currency-row {
+  margin-top: 16px;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--border);
+}
+.tracker-summary .stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 16px;
+}
+.tracker-summary .stats > div {
+  padding: 0 16px;
+  border-left: 1px solid var(--border);
+}
+.tracker-summary .stats > div:first-child {
+  border: 0;
+  padding-left: 0;
+}
+.tracker-summary .stats strong {
+  font-size: 18px;
+}
+.tracker-page > .tabs {
+  padding: 0 0 4px;
+}
+.tracker-page #panel-plan .chips button,
+.tracker-page #panel-calculator .chips button {
+  border-radius: 24px;
+}
+.tracker-page #panel-completed .shift-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 12rem max-content;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--raised);
+  margin-bottom: 12px;
+}
+.completed-shift-details {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.completed-shift-pay {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+@media (min-width: 768px) {
+  .tracker-page #panel-manual .manual-time-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .tracker-page #panel-completed .completed-shift-row {
+    grid-template-columns: minmax(0, 1fr) max-content;
+  }
+  .completed-shift-details {
+    grid-column: 1 / -1;
+  }
+  .completed-shift-pay {
+    text-align: left;
+  }
+  .tracker-page {
+    gap: 20px;
+  }
+  .tracker-heading .quote {
+    gap: 8px;
+    padding: 12px;
+  }
+  .tracker-page .tracker-clock,
+  .tracker-page .tracker-summary {
+    padding: 20px 16px;
+  }
+  .summary-header {
+    flex-direction: column;
+  }
+  .summary-pay {
+    width: 100%;
+    text-align: left;
+  }
+  .summary-mode {
+    width: fit-content;
+  }
+  .tracker-summary .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 0;
+  }
+  .tracker-summary .stats > div:nth-child(3) {
+    padding-left: 0;
+    border: 0;
+  }
+  .tracker-summary .stats strong {
+    font-size: 16px;
+  }
+}

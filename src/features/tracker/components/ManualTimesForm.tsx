@@ -124,7 +124,7 @@ export function ManualTimesForm({
     <form onSubmit={(event) => void submit(event)} className="form-stack">
       <fieldset disabled={busy} className="form-stack">
         <p>{action.hint}</p>
-        <div className="field-grid">
+        <div className="field-grid manual-time-grid">
           {(
             [
               ["start", "Clock in"],

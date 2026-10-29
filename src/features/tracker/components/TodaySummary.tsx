@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Wallet } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { useApp } from "@/components/WorkspaceProvider";
 import { dailySummary } from "../dailySummary";
 import { formatDuration } from "../model";
@@ -12,26 +12,45 @@ export function TodaySummary({ now }: { now: number }) {
   const fmt = (amount: number, currency: string) =>
     data.payVisible ? money(amount, currency) : "•••••";
   return (
-    <section className="card summary">
-      <div className="section-heading">
-        <h2>
-          <Wallet size={17} /> Today&apos;s Summary
-        </h2>
-        <div className="chips">
-          {["gross", "net"].map((mode) => (
-            <button
-              key={mode}
-              aria-pressed={summaryMode === mode}
-              onClick={() => setSummaryMode(mode)}
-            >
-              {mode === "gross" ? "Gross" : "Estimated net"}
-            </button>
-          ))}
+    <section className="card summary tracker-summary">
+      <div className="summary-header">
+        <div className="summary-title">
+          <span className="panel-icon panel-icon-brand" aria-hidden="true">
+            <TrendingUp size={16} />
+          </span>
+          <div>
+            <h2>Today&apos;s Summary</h2>
+            <small>Completed work plus running shifts</small>
+          </div>
+        </div>
+        <div className="summary-pay">
+          <div
+            className="chips summary-mode"
+            role="group"
+            aria-label="Summary pay estimate"
+          >
+            {["gross", "net"].map((mode) => (
+              <button
+                key={mode}
+                aria-pressed={summaryMode === mode}
+                onClick={() => setSummaryMode(mode)}
+              >
+                {mode === "gross" ? "Gross" : "Estimated net"}
+              </button>
+            ))}
+          </div>
+          {summary.groups.length === 1 && (
+            <div className="summary-amount mono">
+              {fmt(
+                summaryMode === "net"
+                  ? summary.groups[0].net
+                  : summary.groups[0].gross,
+                summary.groups[0].currency,
+              )}
+            </div>
+          )}
         </div>
       </div>
-      <small>
-        All entries dated today · completed work plus running shifts
-      </small>
       {!summary.groups.length ? (
         <p className="empty">
           No time recorded today. Clock in or enter today&apos;s times below.
@@ -44,12 +63,14 @@ export function TodaySummary({ now }: { now: number }) {
               {total.runningCount} running
               {total.projectCount ? ` · ${total.projectCount} project(s)` : ""}
             </small>
-            <div className="summary-amount mono">
-              {fmt(
-                summaryMode === "net" ? total.net : total.gross,
-                total.currency,
-              )}
-            </div>
+            {summary.groups.length > 1 && (
+              <div className="summary-amount mono">
+                {fmt(
+                  summaryMode === "net" ? total.net : total.gross,
+                  total.currency,
+                )}
+              </div>
+            )}
             <div className="stats">
               <div>
                 <small>Worked</small>
@@ -62,6 +83,12 @@ export function TodaySummary({ now }: { now: number }) {
                 <strong className="mono">
                   {Math.round(total.lunchSeconds / 60)}m /{" "}
                   {Math.round(total.breakSeconds / 60)}m
+                </strong>
+              </div>
+              <div>
+                <small>Regular</small>
+                <strong className="mono">
+                  {formatDuration(total.regularSeconds)}
                 </strong>
               </div>
               <div>
