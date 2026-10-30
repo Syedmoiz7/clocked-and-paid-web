@@ -1,9 +1,17 @@
 "use client";
 import Link from "next/link";
+import {
+  CalendarRange,
+  CalendarCheck,
+  Clock,
+  TrendingUp,
+  Receipt,
+  Info,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
-import { Field, Panel } from "@/components/Fields";
+import { Field } from "@/components/Fields";
 import { currencies, localDate } from "@/features/history/model";
 import { addDays } from "@/features/history/payPeriods";
 import {
@@ -116,19 +124,19 @@ export function Pay() {
     else setMode(value);
   };
   return (
-    <>
-      <div className="page-heading">
+    <div className="pay-page">
+      <div className="page-heading pay-heading">
         <div>
-          <p className="eyebrow">Know what you earned</p>
           <h1>Pay</h1>
           <p>Earnings, pay periods & take-home estimate</p>
         </div>
       </div>
-      <Panel
-        title={premium ? "Financial Summary" : "Current Period Pay"}
-        subtitle="One set of dates, job and currency filters for this page"
-      >
-        <div className="pay-row">
+      <section className="card pay-filter-card" aria-label="Pay filters">
+        <div className="pay-filter-heading">
+          <h2>
+            <CalendarRange size={14} aria-hidden="true" />
+            {premium ? "Financial Summary" : "Current Period Pay"}
+          </h2>
           <div className="chips" aria-label="Pay date mode">
             {[
               ["payPeriod", "Pay period"],
@@ -145,6 +153,11 @@ export function Pay() {
               </button>
             ))}
           </div>
+        </div>
+        <p className="pay-filter-hint">
+          One set of dates, job and currency filters for this page
+        </p>
+        <div className="pay-row">
           <div className="pay-selects">
             <label className="field">
               <span>Pay job</span>
@@ -267,22 +280,23 @@ export function Pay() {
           {bounds.start || "Choose start"} → {bounds.end || "Choose end"} ·{" "}
           {code} only. Currencies are never converted or combined.
         </p>
-        {valid ? (
-          <FinancialSummary
-            data={data}
-            bounds={bounds}
-            jobId={jobId}
-            currency={code}
-            now={now}
-          />
-        ) : (
-          <p role="alert" className="warning">
-            Choose a valid date range to see Pay calculations.
-          </p>
-        )}
-      </Panel>
+      </section>
+      {valid ? (
+        <FinancialSummary
+          data={data}
+          bounds={bounds}
+          jobId={jobId}
+          currency={code}
+          now={now}
+        />
+      ) : (
+        <p role="alert" className="warning">
+          Choose a valid date range to see Pay calculations.
+        </p>
+      )}
       <PaySection
         title="Upcoming Paychecks"
+        icon={<CalendarCheck size={16} />}
         subtitle="Current and previous scheduled periods · received receipts follow the selected dates"
       >
         {premium ? (
@@ -303,6 +317,8 @@ export function Pay() {
       </PaySection>
       <PaySection
         title="Progress · selected dates"
+        icon={<Clock size={16} />}
+        kind="progress"
         subtitle="Completed work only · same dates as the summary"
       >
         {valid ? (
@@ -313,6 +329,7 @@ export function Pay() {
       </PaySection>
       <PaySection
         title="Trends"
+        icon={<TrendingUp size={16} />}
         subtitle="Earnings, hours worked and per-job breakdown · completed work only"
       >
         {premium ? (
@@ -327,6 +344,7 @@ export function Pay() {
       </PaySection>
       <PaySection
         title="Estimator & Deductions"
+        icon={<Receipt size={16} />}
         subtitle="Understand take-home pay and manage saved deduction rules"
       >
         {premium ? (
@@ -355,9 +373,12 @@ export function Pay() {
         )}
       </PaySection>
       <p className="pay-disclaimer">
-        Estimates only. Recorded amounts, deductions and employer policies can
-        change actual take-home pay. This local preview does not process
-        payroll.
+        <Info size={16} aria-hidden="true" />
+        <span>
+          Estimates only. Recorded amounts, deductions and employer policies can
+          change actual take-home pay. This local preview does not process
+          payroll.
+        </span>
       </p>
       {premium && (
         <Link href="/plans?returnTo=pay">Manage Premium preview →</Link>
@@ -382,6 +403,6 @@ export function Pay() {
           }}
         />
       )}
-    </>
+    </div>
   );
 }

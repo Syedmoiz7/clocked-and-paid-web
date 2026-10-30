@@ -1,0 +1,417 @@
+.pay-page {
+  max-width: 896px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.pay-page .pay-heading {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+}
+.pay-heading h1 {
+  font-size: 24px;
+  font-weight: 900;
+}
+.pay-page .card {
+  border-radius: 16px;
+  background: linear-gradient(
+    145deg,
+    hsl(var(--brand-h) 18% 9%),
+    hsl(var(--brand-h) 18% 7%)
+  );
+}
+.pay-page .pay-filter-card {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.pay-filter-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.pay-filter-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  color: var(--muted);
+}
+.pay-filter-heading .chips {
+  padding: 3px;
+  gap: 2px;
+  border-radius: 12px;
+  background: hsl(var(--brand-h) 16% 7%);
+  border: 1px solid var(--border);
+}
+.pay-page .chips {
+  min-width: 0;
+  max-width: 100%;
+}
+.pay-page .chips > button {
+  border-radius: 8px;
+  font-size: 12px;
+  padding: 7px 12px;
+  flex-shrink: 0;
+}
+.pay-filter-hint {
+  font-size: 11px;
+}
+.pay-page .pay-selects {
+  width: 100%;
+}
+.pay-page .pay-selects .field {
+  flex: 1;
+  min-width: min(180px, 100%);
+}
+.pay-page .pay-selects select {
+  max-width: none;
+}
+.pay-page .pay-period-controls {
+  margin: 0;
+  gap: 10px;
+}
+.pay-page .pay-period-controls p,
+.pay-page .pay-range {
+  font-size: 12px;
+}
+.pay-page .pay-range {
+  padding-top: 12px;
+}
+.pay-page .pay-summary {
+  padding: 0;
+  overflow: hidden;
+}
+.pay-filter-card + .pay-summary {
+  margin-top: -16px;
+}
+.pay-summary-hero {
+  padding: 24px 24px 20px;
+}
+.pay-summary-hero .eyebrow {
+  font-size: 10px;
+  margin-bottom: 12px;
+}
+.pay-page .pay-takehome {
+  display: block;
+  font-size: clamp(30px, 5vw, 36px);
+  line-height: 1.2;
+}
+.pay-summary-hero .pay-row {
+  justify-content: flex-start;
+  margin-top: 8px;
+  gap: 8px;
+}
+.pay-summary-hero > p:last-child {
+  margin-top: 4px;
+  font-size: 11px;
+}
+.pay-page .pay-summary > .pay-metrics {
+  margin: 0;
+  gap: 0;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+}
+.pay-page .pay-summary-primary {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.pay-page .pay-summary .pay-metric {
+  padding: 0 20px;
+  border: 0;
+  border-left: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  gap: 4px;
+}
+.pay-page .pay-summary .pay-metric:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+.pay-summary-primary .pay-metric:first-child > strong {
+  color: var(--pink);
+}
+.pay-page .pay-summary-primary .pay-metric {
+  display: flex;
+  flex-direction: column;
+}
+.pay-summary-primary .pay-metric > strong {
+  margin-top: auto;
+}
+.pay-summary-primary .pay-metric:last-child > strong {
+  color: var(--muted);
+}
+.pay-summary-tips {
+  padding: 0 24px 16px;
+}
+.pay-page .pay-summary-tips .pay-metric {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+}
+.pay-page .pay-summary-tips .pay-metric > strong {
+  font-size: 13px;
+}
+.pay-page .pay-summary-status {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.pay-summary-status .pay-metric {
+  position: relative;
+}
+.pay-summary-status .pay-metric::before {
+  content: "";
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--yellow);
+  margin-bottom: 4px;
+}
+.pay-summary-status .pay-metric.positive::before {
+  background: var(--green);
+}
+.pay-summary-status .pay-metric:not(.positive) > strong {
+  color: var(--yellow);
+}
+.pay-summary-notes {
+  padding: 12px 24px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+}
+.pay-summary > .pay-notice {
+  margin: 0 24px 20px;
+}
+.pay-page .pay-section {
+  margin-top: 0;
+}
+.pay-page .pay-section > summary {
+  padding: 16px 20px;
+}
+.pay-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.pay-section-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--pink);
+}
+.pay-page .pay-section > summary strong {
+  font-size: 14px;
+}
+.pay-page .pay-section > summary small {
+  font-size: 11px;
+  margin-top: 3px;
+}
+.pay-page .pay-section > .panel-content {
+  padding: 20px;
+}
+.pay-page .pay-section-progress .pay-section-icon,
+.pay-estimator-heading .pay-section-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--soft);
+  border: 1px solid hsl(var(--brand-h) 62% 55% / 0.22);
+}
+.pay-page .pay-section-progress .pay-metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+}
+.pay-page .pay-section-progress .pay-metric {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  gap: 4px;
+}
+.pay-page .pay-section-progress .pay-metric strong {
+  font-size: 18px;
+}
+.pay-page .paycheck-card {
+  border-radius: 12px;
+  padding: 16px;
+  background: hsl(var(--brand-h) 16% 8%);
+}
+.pay-page .paycheck-card p {
+  font-size: 12px;
+}
+.pay-page .paycheck-card .pay-metric {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.pay-page .paycheck-card .button-row button {
+  font-size: 12px;
+}
+.pay-page .pay-estimator {
+  padding: 0;
+}
+.pay-estimator-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+  color: var(--pink);
+}
+.pay-estimator-summary {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+.pay-estimator-net {
+  padding: 20px;
+}
+.pay-page .pay-estimator-summary .pay-metric {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  gap: 4px;
+}
+.pay-page .pay-estimator-net .pay-metric > span {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 10px;
+  font-weight: 800;
+}
+.pay-page .pay-estimator-net .pay-metric > strong {
+  color: var(--pink);
+  font-size: 30px;
+}
+.pay-estimator-summary .pay-metrics {
+  border-top: 1px solid var(--border);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 16px 20px;
+}
+.pay-page .pay-deductions {
+  padding-top: 20px;
+  margin-top: 20px;
+}
+.pay-page .pay-deductions > .pay-row h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pay-page .pay-deductions > p {
+  font-size: 12px;
+}
+.pay-page .deduction-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+.pay-page .pay-chart {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.pay-page .pay-chart h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.pay-page .pay-chart h3 > svg {
+  color: var(--green);
+}
+.pay-page .pay-bar-track span {
+  background: linear-gradient(to top, #69cd9744, var(--green));
+}
+.pay-page .pay-bar.hours .pay-bar-track span {
+  background: linear-gradient(
+    to top,
+    hsl(var(--brand-h) 62% 55% / 0.25),
+    var(--pink)
+  );
+}
+.pay-page .pay-lines {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.pay-page .pay-lines li {
+  padding: 12px 16px;
+}
+.pay-page .pay-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  border: 1px solid #6ab6d133;
+  background: #6ab6d10f;
+  color: #8bd0ea;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 0;
+  font-size: 12px;
+}
+.pay-disclaimer > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+@media (max-width: 640px) {
+  .pay-page {
+    gap: 20px;
+  }
+  .pay-page .pay-filter-card {
+    padding: 16px;
+  }
+  .pay-filter-heading .chips {
+    width: 100%;
+  }
+  .pay-filter-heading .chips > button {
+    flex: 1;
+  }
+  .pay-filter-card + .pay-summary {
+    margin-top: -12px;
+  }
+  .pay-summary-hero {
+    padding: 20px 16px 16px;
+  }
+  .pay-page .pay-summary > .pay-metrics {
+    padding: 16px;
+  }
+  .pay-page .pay-summary .pay-metric {
+    padding-inline: 10px;
+  }
+  .pay-page .pay-summary .pay-metric:first-child {
+    padding-left: 0;
+  }
+  .pay-page .pay-summary .pay-metric > strong {
+    font-size: 16px;
+  }
+  .pay-summary-tips {
+    padding-inline: 16px;
+  }
+  .pay-summary-notes {
+    padding: 12px 16px 16px;
+  }
+  .pay-page .pay-section > summary,
+  .pay-page .pay-section > .panel-content {
+    padding: 16px;
+  }
+  .pay-estimator-summary .pay-metrics {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .pay-summary > .pay-notice {
+    margin-inline: 16px;
+  }
+}

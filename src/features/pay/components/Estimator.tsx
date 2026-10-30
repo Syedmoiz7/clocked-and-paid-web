@@ -1,4 +1,5 @@
 "use client";
+import { CalendarRange } from "lucide-react";
 import { useState } from "react";
 import { Field, Toggle } from "@/components/Fields";
 import type { AppState } from "@/types";
@@ -54,31 +55,39 @@ export function Estimator({
     data.payVisible ? money(value, currency) : "•••••";
   return (
     <div className="pay-estimator">
-      <h3>Paycheck Estimator</h3>
+      <h3 className="pay-estimator-heading">
+        <span className="pay-section-icon" aria-hidden="true">
+          <CalendarRange size={16} />
+        </span>
+        Paycheck Estimator
+      </h3>
       <p>
         {bounds.start} → {bounds.end} ·{" "}
         {data.jobs.find((job) => job.id === jobId)?.name ?? "All jobs"} ·{" "}
         {currency}. Uses the filters above and completed shifts only.
       </p>
-      <div className="pay-metrics">
-        <Metric label="Gross pay" value={fmt(gross)} />
-        <Metric
-          label="Est. deductions"
-          value={
-            deductions == null ? "Enter valid deductions" : fmt(deductions)
-          }
-        />
-        <Metric
-          label="Est. net pay"
-          accent
-          value={
-            deductions == null ? "—" : fmt(Math.max(0, gross - deductions))
-          }
-        />
-        <Metric
-          label="Recorded work"
-          value={`${duration(minutes)} · ${entries.length} shifts`}
-        />
+      <div className="pay-estimator-summary">
+        <div className="pay-estimator-net">
+          <Metric
+            label="Est. net pay"
+            value={
+              deductions == null ? "—" : fmt(Math.max(0, gross - deductions))
+            }
+          />
+        </div>
+        <div className="pay-metrics">
+          <Metric label="Gross pay" value={fmt(gross)} />
+          <Metric
+            label="Est. deductions"
+            value={
+              deductions == null ? "Enter valid deductions" : fmt(deductions)
+            }
+          />
+          <Metric
+            label="Recorded work"
+            value={`${duration(minutes)} · ${entries.length} shifts`}
+          />
+        </div>
       </div>
       <p>
         {manual ? "Manual deduction override" : estimate.label}

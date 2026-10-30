@@ -8,17 +8,31 @@ export function PaySection({
   title,
   subtitle,
   children,
+  icon,
+  kind,
 }: {
   title: string;
   subtitle: string;
   children: ReactNode;
+  icon?: ReactNode;
+  kind?: "progress";
 }) {
   return (
-    <details className="card pay-section" open>
+    <details
+      className={`card pay-section${kind ? ` pay-section-${kind}` : ""}`}
+      open
+    >
       <summary>
-        <span>
-          <strong>{title}</strong>
-          <small>{subtitle}</small>
+        <span className="pay-section-heading">
+          {icon && (
+            <span className="pay-section-icon" aria-hidden="true">
+              {icon}
+            </span>
+          )}
+          <span>
+            <strong>{title}</strong>
+            <small>{subtitle}</small>
+          </span>
         </span>
         <span className="section-chevron" aria-hidden>
           <ChevronDown size={16} />

@@ -1,4 +1,5 @@
 "use client";
+import { Receipt } from "lucide-react";
 import { useState } from "react";
 import { Toggle } from "@/components/Fields";
 import type { AppState, Deduction } from "@/types";
@@ -50,8 +51,11 @@ export function Deductions({
   return (
     <div className="pay-deductions">
       <div className="pay-row">
-        <h3>Taxes & Deductions</h3>
-        <button disabled={busy} onClick={() => setForm({})}>
+        <h3>
+          <Receipt size={16} aria-hidden="true" />
+          Taxes & Deductions
+        </h3>
+        <button className="primary" disabled={busy} onClick={() => setForm({})}>
           + Add deduction
         </button>
       </div>

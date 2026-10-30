@@ -1,4 +1,5 @@
 "use client";
+import { TrendingUp, Clock } from "lucide-react";
 import type { AppState } from "@/types";
 import { duration, money, localDate } from "@/features/history/model";
 import { payPeriod } from "@/features/history/payPeriods";
@@ -94,7 +95,14 @@ function Chart({
         : money(row.earnings, currency);
   return (
     <div className="pay-chart">
-      <h3>{title}</h3>
+      <h3>
+        {kind === "earnings" ? (
+          <TrendingUp size={16} aria-hidden="true" />
+        ) : (
+          <Clock size={16} aria-hidden="true" />
+        )}
+        {title}
+      </h3>
       <div
         className="pay-chart-scroll"
         role="region"
