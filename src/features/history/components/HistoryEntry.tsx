@@ -5,7 +5,12 @@ import {
   Pencil,
   Trash2,
   Play,
-  BriefcaseBusiness,
+  FolderOpen,
+  Briefcase,
+  Clock,
+  DollarSign,
+  BadgeCheck,
+  Utensils,
 } from "lucide-react";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
 import {
@@ -18,6 +23,7 @@ import {
 } from "../model";
 import { canResume, entryCurrency } from "../summary";
 import type { Shift } from "@/types";
+import { formatDuration } from "@/features/tracker/model";
 
 export function HistoryEntry({
   entry,
@@ -75,44 +81,6 @@ export function HistoryEntry({
       data-entry-id={entry.id}
     >
       <div className="entry-main">
-        <div className="entry-date">
-          {project ? (
-            <BriefcaseBusiness size={20} />
-          ) : (
-            <>
-              <strong>{entry.date.slice(8)}</strong>
-              <small>
-                {new Date(`${entry.date}T12:00:00`).toLocaleDateString(
-                  "en-US",
-                  { month: "short" },
-                )}
-              </small>
-            </>
-          )}
-        </div>
-        <div className="entry-identity">
-          <h3>{project ? entry.projectName || "Project" : date}</h3>
-          <p>
-            {project
-              ? `${entry.date} → ${entry.endDate ?? entry.date}`
-              : `${entry.missingClockIn ? "Missing clock-in" : time(entry.startedAt)} → ${entry.endedAt ? time(entry.endedAt) : live ? "Now" : "Unfinished"}`}
-          </p>
-          <small>
-            {job?.name ?? "No job assigned"}
-            {job?.archived ? " (removed)" : ""}
-            {!project
-              ? ` · ${duration(workedMinutes(entry, live ? now : undefined))}`
-              : ""}
-          </small>
-        </div>
-        <div className="entry-amount">
-          <strong className="mono">{fmt(earnings)}</strong>
-          <span
-            className={`payment-badge ${status.startsWith("Paid") ? "received" : ""}`}
-          >
-            {status}
-          </span>
-        </div>
         {selectionMode && !live && (
           <label className="entry-check">
             <input
@@ -124,6 +92,79 @@ export function HistoryEntry({
             />
           </label>
         )}
+
+        <div className="entry-identity">
+          <div className="entry-title-row">
+            {project && (
+              <span className="entry-project-icon" aria-hidden="true">
+                <FolderOpen size={18} />
+              </span>
+            )}
+            <h3>{project ? entry.projectName || "Project" : date}</h3>
+            <span className="entry-job-badge">
+              <Briefcase size={11} aria-hidden="true" />
+              {job?.name ?? "No job assigned"}
+              {job?.archived ? " (removed)" : ""}
+            </span>
+          </div>
+          <p className="mono">
+            {project
+              ? `${entry.date} → ${entry.endDate ?? entry.date}`
+              : `${entry.missingClockIn ? "Missing clock-in" : time(entry.startedAt)} → ${entry.endedAt ? time(entry.endedAt) : live ? "Now" : "Unfinished"}`}
+          </p>
+        </div>
+        <div className="entry-stat-grid">
+          {!project && (
+            <div className="entry-stat">
+              <small>
+                <Clock size={12} aria-hidden="true" />
+                Worked
+              </small>
+              <strong className="mono">
+                {!live && status === "Incomplete"
+                  ? "—"
+                  : duration(workedMinutes(entry, live ? now : undefined))}
+              </strong>
+            </div>
+          )}
+          <div className="entry-amount entry-stat">
+            <small>
+              <DollarSign size={12} aria-hidden="true" />
+              {project ? "Flat rate" : "Earned"}
+            </small>
+            <strong className="mono">{fmt(earnings)}</strong>
+            {!project && (entry.tips ?? 0) > 0 && (
+              <span className="entry-tips">
+                incl. {fmt(entry.tips ?? 0)} tips
+              </span>
+            )}
+          </div>
+          <div className="entry-stat">
+            <small>
+              <BadgeCheck size={12} aria-hidden="true" />
+              Status
+            </small>
+            <span
+              className={`payment-badge ${status.startsWith("Paid") ? "received" : status === "Unpaid" ? "unpaid" : ""}`}
+            >
+              {status}
+            </span>
+          </div>
+          {!project && (
+            <div className="entry-stat">
+              <small>
+                <Utensils size={12} aria-hidden="true" />
+                Lunch{" "}
+                {entry.lunchPaid && (
+                  <span className="entry-paid-lunch">Paid</span>
+                )}
+              </small>
+              <strong className="mono">
+                {formatDuration(entry.lunchMinutes * 60)}
+              </strong>
+            </div>
+          )}
+        </div>
       </div>
       {live ? (
         <div className="entry-footer">
@@ -145,11 +186,11 @@ export function HistoryEntry({
               {!project && (
                 <>
                   <p>
-                    Lunch: {entry.lunchMinutes}m (
+                    Lunch: {formatDuration(entry.lunchMinutes * 60)} (
                     {entry.lunchPaid ? "paid" : "unpaid"})
                   </p>
                   <p>
-                    Breaks: {entry.breakMinutes}m
+                    Breaks: {formatDuration(entry.breakMinutes * 60)}
                     {entry.breakLabel ? ` · ${entry.breakLabel}` : ""}
                   </p>
                   <p>
@@ -194,7 +235,7 @@ export function HistoryEntry({
             {status === "Paid via Paycheck" && (
               <small>
                 Payment status comes from a saved paycheck receipt. Edit the
-                receipt in Pay when that web module is available.
+                receipt in Pay to change its payment status.
               </small>
             )}
           </div>

@@ -9,6 +9,8 @@ import {
   SearchX,
   Sparkles,
   CheckCheck,
+  ListChecks,
+  FolderOpen,
 } from "lucide-react";
 import { Modal } from "@/components/Fields";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
@@ -61,6 +63,10 @@ export function History() {
   }, [data.activeShift?.id, data.extraShifts.length]);
   const visible = visibleHistory(data, filters, data.isPremium, now),
     entries = newestFirst(visible.entries);
+  const shiftCount = entries.filter(
+    (entry) => entry.entryType !== "project",
+  ).length;
+  const projectCount = entries.length - shiftCount;
   const eligible = entries
     .filter((entry) => selectable(entry, data.paychecks, data.jobs))
     .map((entry) => entry.id);
@@ -91,21 +97,7 @@ export function History() {
     }
   };
   return (
-    <>
-      <div className="page-heading">
-        <div>
-          <h1>Work History</h1>
-          <p>Your time, earnings, and workdays in one place.</p>
-        </div>
-        <div className="actions">
-          <button disabled={busy} onClick={() => add("shift")}>
-            <Plus size={16} /> Add shift
-          </button>
-          <button disabled={busy} onClick={() => add("project")}>
-            <Plus size={16} /> Add project
-          </button>
-        </div>
-      </div>
+    <div className="history-page">
       <div className="history-view-toggle" aria-label="History display">
         <button aria-pressed={view === "list"} onClick={() => setView("list")}>
           <List size={17} /> List
@@ -118,6 +110,58 @@ export function History() {
           {!data.isPremium && <Sparkles size={13} />}
         </button>
       </div>
+      <div className="page-heading history-heading">
+        <div>
+          <h1>{view === "list" ? "Work History" : "Pay Calendar"}</h1>
+          <p>
+            {view === "list" ? (
+              <>
+                {shiftCount} {shiftCount === 1 ? "shift" : "shifts"} ·{" "}
+                {projectCount} {projectCount === 1 ? "project" : "projects"}
+                {visible.live.length ? ` · ${visible.live.length} active` : ""}
+              </>
+            ) : (
+              "Estimated earnings by period"
+            )}
+          </p>
+        </div>
+        <div className="history-header-tools" hidden={view !== "list"}>
+          <div className="actions history-header-actions">
+            <button
+              disabled={busy}
+              aria-pressed={selectionMode}
+              onClick={() => {
+                setSelectionMode(!selectionMode);
+                setSelected([]);
+              }}
+            >
+              <ListChecks size={16} aria-hidden="true" />
+              {selectionMode ? "Done selecting" : "Select shifts"}
+            </button>
+            <button
+              className="primary"
+              disabled={busy}
+              onClick={() => add("shift")}
+            >
+              <Plus size={16} /> Add shift
+            </button>
+            <button
+              className="history-project-action"
+              disabled={busy}
+              onClick={() => add("project")}
+            >
+              <FolderOpen size={16} aria-hidden="true" /> Add project
+            </button>
+          </div>
+          <HistoryTotals
+            entries={entries}
+            live={visible.live}
+            filters={filters}
+            now={now}
+            compact
+          />
+        </div>
+      </div>
       <div hidden={view !== "list"}>
         <HistoryFilters
           filters={filters}
@@ -125,27 +169,11 @@ export function History() {
           onClear={clearFilters}
           now={now}
         />
-        <HistoryTotals
-          entries={entries}
-          live={visible.live}
-          filters={filters}
-          now={now}
-        />
         <div className="history-list-toolbar">
           <p>
             {entries.length} saved {entries.length === 1 ? "entry" : "entries"}
             {visible.live.length ? ` + ${visible.live.length} running` : ""}
           </p>
-          <button
-            disabled={busy}
-            aria-pressed={selectionMode}
-            onClick={() => {
-              setSelectionMode(!selectionMode);
-              setSelected([]);
-            }}
-          >
-            {selectionMode ? "Done selecting" : "Select shifts"}
-          </button>
         </div>
         {selectionMode && (
           <section className="bulk-toolbar" aria-label="Bulk payment actions">
@@ -296,7 +324,7 @@ export function History() {
           </div>
         </Modal>
       )}
-    </>
+    </div>
   );
 }
 function HistoryPaywall() {

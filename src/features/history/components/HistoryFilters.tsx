@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal, Filter, ChevronDown } from "lucide-react";
 import { Field, Toggle } from "@/components/Fields";
 import { useApp } from "@/components/WorkspaceProvider";
 import type { HistoryFilters as Filters } from "../model";
@@ -28,6 +28,7 @@ export function HistoryFilters({
   return (
     <section className="card history-filters" aria-label="History filters">
       <div className="filter-toolbar">
+        <Filter size={14} className="history-filter-icon" aria-hidden="true" />
         <div className="chips" aria-label="History period">
           {periods.map((period) => (
             <button
@@ -39,9 +40,14 @@ export function HistoryFilters({
             </button>
           ))}
         </div>
-        <button aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>
+        <button
+          className="history-more-filters"
+          aria-expanded={expanded}
+          onClick={() => setExpanded(!expanded)}
+        >
           <SlidersHorizontal size={15} /> {expanded ? "Hide" : "More"} filters
           {count ? ` (${count})` : ""}
+          <ChevronDown size={13} aria-hidden="true" />
         </button>
       </div>
       <p className="range-label" role="status">

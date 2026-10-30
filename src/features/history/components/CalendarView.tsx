@@ -181,7 +181,7 @@ export function CalendarView({
       <section className="card form-stack">
         <div className="section-heading">
           <h2>
-            <CalendarDays size={18} /> Pay Calendar
+            <CalendarDays size={18} aria-hidden="true" /> Calendar views
           </h2>
           <small>Gross earnings include tips once</small>
         </div>
@@ -297,7 +297,7 @@ export function CalendarView({
           <h3>{jobId ? "No pay schedule for this job" : "Choose a job"}</h3>
           <p>
             Pay periods need a job with a pay frequency and anchor date. Job
-            schedule management comes with the Jobs web module.
+            schedules can be configured in Jobs.
           </p>
         </section>
       )}
