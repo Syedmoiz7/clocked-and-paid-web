@@ -87,63 +87,75 @@ export function JobForm({
         busy={form.saving || Boolean(reminder || removeReminder)}
         onClose={onClose}
       >
-        <form onSubmit={form.submit} noValidate>
+        <form className="job-editor" onSubmit={form.submit} noValidate>
           <fieldset disabled={form.saving}>
-            <Field
-              label="Company / job name"
-              value={draft.name}
-              onChange={(event) => update({ name: event.target.value })}
-            />
-            <Field
-              label="Role / title"
-              value={draft.title ?? ""}
-              onChange={(event) => update({ title: event.target.value })}
-            />
-            <label className="field">
-              <span>Notes</span>
-              <textarea
-                value={draft.notes ?? ""}
-                onChange={(event) => update({ notes: event.target.value })}
-              />
-            </label>
-            <div className="field-grid">
-              <Field
-                label="Hourly rate"
-                type="number"
-                step="any"
-                value={numbers.hourlyRate}
-                disabled={frozen}
-                onChange={(event) => onNumber("hourlyRate", event.target.value)}
-              />
+            <div className="job-form-section job-identity-section">
+              <h3>Identity</h3>
+              <div className="field-grid">
+                <Field
+                  label="Company / job name"
+                  value={draft.name}
+                  onChange={(event) => update({ name: event.target.value })}
+                />
+                <Field
+                  label="Role / title"
+                  value={draft.title ?? ""}
+                  onChange={(event) => update({ title: event.target.value })}
+                />
+              </div>
               <label className="field">
-                <span>Currency</span>
-                <select
-                  value={draft.currency}
-                  disabled={currencyLocked}
-                  onChange={(event) => update({ currency: event.target.value })}
-                >
-                  {currencies.map((value) => (
-                    <option key={value}>{value}</option>
-                  ))}
-                </select>
+                <span>Notes</span>
+                <textarea
+                  value={draft.notes ?? ""}
+                  onChange={(event) => update({ notes: event.target.value })}
+                />
               </label>
             </div>
-            <p>
-              Rate changes apply to future work. Existing entries keep their pay
-              rules.
-            </p>
-            {currencyLocked && (
-              <p className="warning">
-                Currency is fixed while this job has work, deductions or
-                receipts. Use another profile for another currency.
+            <div className="job-form-section">
+              <h3>Pay Rate &amp; Currency</h3>
+              <div className="field-grid">
+                <Field
+                  label="Hourly rate"
+                  type="number"
+                  step="any"
+                  value={numbers.hourlyRate}
+                  disabled={frozen}
+                  onChange={(event) =>
+                    onNumber("hourlyRate", event.target.value)
+                  }
+                />
+                <label className="field">
+                  <span>Currency</span>
+                  <select
+                    value={draft.currency}
+                    disabled={currencyLocked}
+                    onChange={(event) =>
+                      update({ currency: event.target.value })
+                    }
+                  >
+                    {currencies.map((value) => (
+                      <option key={value}>{value}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              <p>
+                Rate changes apply to future work. Existing entries keep their
+                pay rules.
               </p>
-            )}
-            {frozen && (
-              <p className="warning">
-                Finish or recover this job’s shift before changing pay or lunch
-                defaults. Notes and reminder edits can still be saved.
-              </p>
-            )}
+              {currencyLocked && (
+                <p className="warning">
+                  Currency is fixed while this job has work, deductions or
+                  receipts. Use another profile for another currency.
+                </p>
+              )}
+              {frozen && (
+                <p className="warning">
+                  Finish or recover this job’s shift before changing pay or
+                  lunch defaults. Notes and reminder edits can still be saved.
+                </p>
+              )}
+            </div>
             <div className="job-form-section">
               <h3>Overtime</h3>
               <p>Blank overrides inherit your saved Tracker defaults.</p>

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { BriefcaseBusiness, Plus } from "lucide-react";
+import { Briefcase, Plus } from "lucide-react";
 import { useApp, useWorkspace } from "@/components/WorkspaceProvider";
 import { Confirm } from "@/features/pay/components/Shared";
 import type { MockJob } from "@/types";
@@ -25,10 +25,9 @@ export function Jobs() {
     limitReached = jobs.length >= entitlementsFor(data).jobLimit;
   const selected = jobs.find((job) => job.id === data.selectedJobId);
   return (
-    <>
-      <div className="page-heading">
+    <div className="jobs-page">
+      <div className="page-heading jobs-heading">
         <div>
-          <p className="eyebrow">Work profiles</p>
           <h1>Jobs</h1>
           <p>
             Manage your jobs, pay rates, schedules, reminders, and deductions.
@@ -38,7 +37,7 @@ export function Jobs() {
       <section className="card jobs-workspace">
         <header className="jobs-header">
           <span className="jobs-header-icon">
-            <BriefcaseBusiness size={21} />
+            <Briefcase size={16} aria-hidden="true" />
           </span>
           <div>
             <h2>Your jobs</h2>
@@ -76,7 +75,7 @@ export function Jobs() {
           )}
           {!jobs.length && (
             <div className="empty">
-              <BriefcaseBusiness size={34} />
+              <Briefcase size={34} aria-hidden="true" />
               <h3>Add your first job</h3>
               <p>Set a name and hourly rate to keep your work organized.</p>
             </div>
@@ -130,6 +129,6 @@ export function Jobs() {
           </p>
         </Confirm>
       )}
-    </>
+    </div>
   );
 }

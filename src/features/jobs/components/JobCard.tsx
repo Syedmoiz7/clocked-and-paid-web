@@ -1,12 +1,6 @@
 "use client";
 import { useState } from "react";
-import {
-  BriefcaseBusiness,
-  Pencil,
-  Trash2,
-  Star,
-  ChevronDown,
-} from "lucide-react";
+import { Briefcase, Pencil, Trash2, Star, ChevronDown } from "lucide-react";
 import type { AppState, MockJob } from "@/types";
 import { money, localDate } from "@/features/history/model";
 import { clockLabel } from "@/features/settings/model";
@@ -43,18 +37,32 @@ export function JobCard({
       aria-label={`${job.name} profile`}
     >
       <div className="job-card-header">
-        <span className="job-avatar" style={{ color: job.color }}>
-          <BriefcaseBusiness size={22} />
+        <span className="job-avatar" aria-hidden="true">
+          {job.isDefault ? <Star size={14} /> : <Briefcase size={14} />}
         </span>
         <div className="job-identity">
-          <h3>{job.name}</h3>
-          {job.title && <p>{job.title}</p>}
-          <span className="job-rate">
+          <div className="job-title-row">
+            <span
+              className="job-color-dot"
+              style={{ backgroundColor: job.color }}
+              aria-hidden="true"
+            />
+            <h3>{job.name}</h3>
+            <div className="job-badges">
+              {jobBadges(data, job).map((label) => (
+                <span key={label} data-state={label}>
+                  {label}
+                </span>
+              ))}
+            </div>
+          </div>
+          <p className="job-rate">
+            {job.title && <>{job.title} · </>}
             {data.payVisible
               ? money(job.hourlyRate, job.currency ?? data.preferences.currency)
               : "•••••"}{" "}
             / hr · {job.currency ?? data.preferences.currency}
-          </span>
+          </p>
         </div>
         <div className="job-card-tools">
           <button
@@ -62,75 +70,70 @@ export function JobCard({
             disabled={busy}
             onClick={onEdit}
           >
-            <Pencil size={16} />
+            <Pencil size={14} aria-hidden="true" />
+          </button>
+          <button
+            className="job-details-button"
+            aria-expanded={expanded}
+            onClick={() => setExpanded((value) => !value)}
+          >
+            {expanded ? "Hide details" : "Details"}
+            <ChevronDown size={14} aria-hidden="true" />
           </button>
           <button
             aria-label={`Delete ${job.name}`}
             disabled={busy || jobInProgress(data, job.id)}
             onClick={onRemove}
           >
-            <Trash2 size={16} />
+            <Trash2 size={14} aria-hidden="true" />
           </button>
         </div>
       </div>
-      <div className="job-badges">
-        {jobBadges(data, job).map((label) => (
-          <span key={label}>
-            {label === "Default" && <Star size={12} />}
-            {label}
-          </span>
-        ))}
-      </div>
-      <div className="button-row">
-        {data.selectedJobId !== job.id && (
-          <button
-            disabled={busy || workInProgress(data)}
-            onClick={() => onSelect(false)}
-          >
-            Use for Tracker
-          </button>
-        )}
-        {!job.isDefault && (
-          <button
-            disabled={busy || workInProgress(data)}
-            onClick={() => onSelect(true)}
-          >
-            Make default & select
-          </button>
-        )}
-        <button
-          className="job-details-button"
-          aria-expanded={expanded}
-          onClick={() => setExpanded((value) => !value)}
-        >
-          {expanded ? "Hide details" : "Details"}
-          <ChevronDown size={16} />
-        </button>
-      </div>
+      {(data.selectedJobId !== job.id || !job.isDefault) && (
+        <div className="button-row job-selection-actions">
+          {data.selectedJobId !== job.id && (
+            <button
+              disabled={busy || workInProgress(data)}
+              onClick={() => onSelect(false)}
+            >
+              Use for Tracker
+            </button>
+          )}
+          {!job.isDefault && (
+            <button
+              disabled={busy || workInProgress(data)}
+              onClick={() => onSelect(true)}
+            >
+              Make default & select
+            </button>
+          )}
+        </div>
+      )}
       {expanded && (
         <div className="job-details">
           {job.notes && <p className="preserve-lines">{job.notes}</p>}
           {job.createdAt && (
             <p>Added {new Date(job.createdAt).toLocaleDateString()}</p>
           )}
+          <div className="job-quick-facts" aria-label="Job defaults">
+            <span>
+              OT after{" "}
+              {job.overtimeThreshold ?? data.defaultPlan.overtimeThreshold}h
+            </span>
+            <span>
+              ×{job.overtimeMultiplier ?? data.defaultPlan.overtimeMultiplier}{" "}
+              OT
+            </span>
+            <span>
+              {(job.lunchEnabled ?? data.defaultPlan.lunchEnabled)
+                ? `${job.lunchMinutes ?? data.defaultPlan.lunchMinutes}m lunch`
+                : "Lunch off"}
+            </span>
+            <span className={job.enableTips ? "job-tips-badge" : ""}>
+              Tips {job.enableTips ? "at clock-out" : "off"}
+            </span>
+          </div>
           <dl className="job-facts">
-            <div>
-              <dt>Overtime</dt>
-              <dd>
-                After{" "}
-                {job.overtimeThreshold ?? data.defaultPlan.overtimeThreshold}h ·{" "}
-                {job.overtimeMultiplier ?? data.defaultPlan.overtimeMultiplier}×
-              </dd>
-            </div>
-            <div>
-              <dt>Workday defaults</dt>
-              <dd>
-                {(job.lunchEnabled ?? data.defaultPlan.lunchEnabled)
-                  ? `${job.lunchMinutes ?? data.defaultPlan.lunchMinutes}m lunch`
-                  : "Lunch off"}{" "}
-                · Tips {job.enableTips ? "on" : "off"}
-              </dd>
-            </div>
             <div>
               <dt>Lunch reminder</dt>
               <dd>
