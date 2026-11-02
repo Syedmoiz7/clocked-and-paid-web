@@ -26,15 +26,26 @@ test("client-style Show Pay switch controls the shared setting across web module
   await toggle.getByText("Show Pay", { exact: true }).click();
   await expect(toggle).toBeChecked();
   await expect(page.locator(".summary-amount")).toHaveText("$180.00");
-  for (const name of ["History", "Pay", "Jobs", "Settings", "Tracker"]) {
+  for (const [name, heading] of [
+    ["History", "Work History"],
+    ["Pay", "Pay"],
+    ["Jobs", "Jobs"],
+    ["Settings", "Settings"],
+    ["Tracker", "Today's Shift"],
+  ]) {
     await page
       .getByRole("navigation", { name: "Main navigation", exact: true })
       .getByRole("link", { name, exact: true })
       .click();
+    await expect(
+      page.getByRole("heading", { name: heading, level: 1, exact: true }),
+    ).toBeVisible();
     await expect(toggle).toHaveCount(1);
     await expect(toggle).toBeChecked();
   }
+  await expect(toggle).toBeEnabled();
   await toggle.focus();
+  await expect(toggle).toBeFocused();
   await page.keyboard.press("Space");
   await expect(toggle).not.toBeChecked();
   await expect

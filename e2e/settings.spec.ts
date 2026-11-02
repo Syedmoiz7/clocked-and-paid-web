@@ -298,6 +298,7 @@ test("mock account name/email updates keep separate drafts and password feedback
   await expect(
     page.getByRole("button", { name: "Update email", exact: true }),
   ).toBeDisabled();
+  await expect(page.locator(".toast")).toHaveCount(0);
   await page.getByLabel("New mock password", { exact: true }).fill("short");
   await page.getByLabel("Confirm mock password", { exact: true }).fill("short");
   await page

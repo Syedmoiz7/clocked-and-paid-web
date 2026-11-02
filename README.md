@@ -2,6 +2,8 @@
 
 Next.js App Router app, beside `mobile/` and `backend/`. The client source provides visual references; the reviewed mobile models supply calculation and state behavior. Tracker, History/Calendar, Pay, Jobs, Settings, mock auth/onboarding and public landing/legal/contact pages are implemented for review, not the full web product. See [web scope](../docs/WEB_SCOPE.md), [parity/status](../docs/WEB_PARITY.md), [History details](../docs/WEB_HISTORY_PARITY.md), [Pay details](../docs/WEB_PAY_PARITY.md), [Jobs details](../docs/WEB_JOBS_PARITY.md), [Settings details](../docs/WEB_SETTINGS_PARITY.md), [auth/setup details](../docs/WEB_AUTH_ONBOARDING_PARITY.md) and [public-page details](../docs/WEB_PUBLIC_PARITY.md).
 
+Latest engineering acceptance record: [final cross-module review](../docs/WEB_FINAL_REVIEW.md), dated 2026-11-02. It includes the complete browser run, focused stability follow-up, preserved mobile baseline and remaining client/platform acceptance.
+
 ## Run
 
 Use Node 20.9+ and npm:

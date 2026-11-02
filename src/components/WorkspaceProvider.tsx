@@ -42,6 +42,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       }
       pending.current = true;
       setBusy(true);
+      notify("");
       try {
         const next = await workspaceRepository.commit(action, read());
         if (next.revision >= revision.current) {
