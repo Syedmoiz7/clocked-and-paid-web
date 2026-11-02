@@ -118,8 +118,9 @@ test("App drafts survive Account tab switches and saved preferences affect Track
     .getByRole("switch", { name: "Hide pay by default", exact: true })
     .click();
   await page
-    .getByRole("combobox", { name: "Clock Format", exact: true })
-    .selectOption("24h");
+    .getByRole("group", { name: "Clock Format", exact: true })
+    .getByRole("button", { name: "24-Hour 09:30", exact: true })
+    .click();
   await page.getByRole("tab", { name: "Account", exact: true }).click();
   await expect(
     page.getByRole("region", { name: "Unsaved preferences", exact: true }),
@@ -196,11 +197,13 @@ test("saving defaults preserves a running plan while timer direction changes exp
     .getByLabel("Typical work hours (up to 24)", { exact: true })
     .fill("12");
   await page
-    .getByRole("combobox", { name: "Shift Timer Direction", exact: true })
-    .selectOption("count-down");
+    .getByRole("group", { name: "Shift Timer Direction", exact: true })
+    .getByRole("button", { name: "Count Down Time remaining", exact: true })
+    .click();
   await page
-    .getByRole("combobox", { name: "Browser Tab Time", exact: true })
-    .selectOption("off");
+    .getByRole("group", { name: "Browser Tab Time", exact: true })
+    .getByRole("button", { name: "Off Standard title", exact: true })
+    .click();
   await page.getByRole("button", { name: "Save Changes", exact: true }).click();
   await expect(
     page.getByRole("region", { name: "Unsaved preferences", exact: true }),
@@ -321,6 +324,17 @@ test("mock account name/email updates keep separate drafts and password feedback
   expect(JSON.stringify(await savedState(page))).not.toContain(
     "local-password-123",
   );
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({
+    path: test.info().outputPath("settings-account-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({
+    path: test.info().outputPath("settings-account-mobile.png"),
+    fullPage: true,
+  });
   await page
     .getByRole("button", { name: "Sign out of mock account", exact: true })
     .click();
@@ -766,8 +780,9 @@ test("browser title timer works across routes and exposes time over plan", async
     .getByRole("switch", { name: "Return-to-Work Reminder", exact: true })
     .click();
   await page
-    .getByRole("combobox", { name: "Browser Tab Time", exact: true })
-    .selectOption("count-down");
+    .getByRole("group", { name: "Browser Tab Time", exact: true })
+    .getByRole("button", { name: "Count Down Time remaining", exact: true })
+    .click();
   await page.getByRole("button", { name: "Save Changes", exact: true }).click();
   await expect(
     page.getByRole("region", { name: "Unsaved preferences", exact: true }),
@@ -901,8 +916,9 @@ test("default reminder drafts and clock labels follow saved App preferences", as
     .click();
   await expect(page.locator(".job-reminder")).toContainText("At 1:00 PM");
   await page
-    .getByRole("combobox", { name: "Clock Format", exact: true })
-    .selectOption("24h");
+    .getByRole("group", { name: "Clock Format", exact: true })
+    .getByRole("button", { name: "24-Hour 09:30", exact: true })
+    .click();
   await expect(page.locator(".job-reminder")).toContainText("At 13:00");
   await page.getByRole("button", { name: "Save Changes", exact: true }).click();
   await expect(

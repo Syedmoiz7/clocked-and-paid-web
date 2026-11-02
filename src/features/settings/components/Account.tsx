@@ -1,5 +1,5 @@
 "use client";
-import { User } from "lucide-react";
+import { User, Mail, Lock, Save, LogOut } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Field, Panel } from "@/components/Fields";
@@ -56,7 +56,7 @@ export function Account({ unsaved }: { unsaved: boolean }) {
     <Panel
       title="Account"
       icon={<User size={16} />}
-      subtitle="Local demo account. Guest and mock-account modes share this browser workspace; no server account or email delivery is created."
+      subtitle="Profile changes are saved in this browser for the demo."
     >
       {data.account.mode === "guest" ? (
         <div className="settings-guest">
@@ -71,55 +71,79 @@ export function Account({ unsaved }: { unsaved: boolean }) {
         </div>
       ) : (
         <>
-          <p>Mock account · {data.account.email}</p>
-          <fieldset disabled={busy} className="form-stack">
-            <Field
-              label="Display name"
-              value={draft.name}
-              onChange={(event) =>
-                setDraft((value) => ({ ...value, name: event.target.value }))
-              }
-            />
-            <button
-              disabled={draft.name === data.account.name}
-              onClick={() =>
-                void run(
-                  "name",
-                  () => actions.account({ name: draft.name }),
-                  "Display name updated locally.",
-                )
-              }
-            >
-              {operation === "name" ? "Saving…" : "Update name"}
-            </button>
-            {message.name && <p role="status">{message.name}</p>}
-            <Field
-              label="Email address"
-              type="email"
-              value={draft.email}
-              onChange={(event) =>
-                setDraft((value) => ({ ...value, email: event.target.value }))
-              }
-            />
-            <p>
-              Enter a different email to enable Update email. No verification
-              email is sent.
-            </p>
-            <button
-              disabled={draft.email === data.account.email}
-              onClick={() =>
-                void run(
-                  "email",
-                  () => actions.account({ email: draft.email }),
-                  "Email updated locally; no verification email was sent.",
-                )
-              }
-            >
-              {operation === "email" ? "Saving…" : "Update email"}
-            </button>
-            {message.email && <p role="status">{message.email}</p>}
-            <div className="job-form-section">
-              <h3>Update password</h3>
+          <fieldset
+            disabled={busy}
+            className="form-stack settings-account-form"
+          >
+            <div className="settings-account-section">
+              <h3>
+                <User size={14} aria-hidden="true" />
+                Name
+              </h3>
+              <Field
+                label="Display name"
+                value={draft.name}
+                onChange={(event) =>
+                  setDraft((value) => ({ ...value, name: event.target.value }))
+                }
+              />
+              <button
+                className="primary"
+                disabled={draft.name === data.account.name}
+                onClick={() =>
+                  void run(
+                    "name",
+                    () => actions.account({ name: draft.name }),
+                    "Display name updated locally.",
+                  )
+                }
+              >
+                <Save size={14} aria-hidden="true" />
+                {operation === "name" ? "Saving…" : "Update name"}
+              </button>
+              {message.name && <p role="status">{message.name}</p>}
+            </div>
+            <div className="settings-account-section">
+              <h3>
+                <Mail size={14} aria-hidden="true" />
+                Email address
+              </h3>
+              <p className="settings-current-email">
+                <Mail size={14} aria-hidden="true" />
+                Current: <strong>{data.account.email}</strong>
+              </p>
+              <Field
+                label="Email address"
+                type="email"
+                value={draft.email}
+                onChange={(event) =>
+                  setDraft((value) => ({ ...value, email: event.target.value }))
+                }
+              />
+              <p>
+                Enter a different email to enable Update email. No verification
+                email is sent.
+              </p>
+              <button
+                disabled={draft.email === data.account.email}
+                onClick={() =>
+                  void run(
+                    "email",
+                    () => actions.account({ email: draft.email }),
+                    "Email updated locally; no verification email was sent.",
+                  )
+                }
+              >
+                <Mail size={14} aria-hidden="true" />
+                {operation === "email" ? "Saving…" : "Update email"}
+              </button>
+              {message.email && <p role="status">{message.email}</p>}
+            </div>
+            <div className="settings-account-section">
+              <h3>
+                <Lock size={14} aria-hidden="true" />
+                Update password
+              </h3>
               <Field
                 label="New mock password"
                 type="password"
@@ -148,12 +172,14 @@ export function Account({ unsaved }: { unsaved: boolean }) {
                   )
                 }
               >
+                <Lock size={14} aria-hidden="true" />
                 {operation === "password" ? "Saving…" : "Update password"}
               </button>
               {message.password && <p role="status">{message.password}</p>}
             </div>
           </fieldset>
           <button disabled={busy} onClick={() => setSignOut(true)}>
+            <LogOut size={14} aria-hidden="true" />
             Sign out of mock account
           </button>
         </>

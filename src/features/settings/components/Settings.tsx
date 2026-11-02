@@ -10,7 +10,7 @@ import { PreferenceCards } from "./PreferenceCards";
 import { Appearance, PayPreview } from "./Appearance";
 import { PrivacyCard } from "./PrivacyCard";
 import { DataCards } from "./DataCards";
-import { User, SlidersHorizontal } from "lucide-react";
+import { User, SlidersHorizontal, Save, Sparkles } from "lucide-react";
 
 export function Settings() {
   const data = useApp(),
@@ -70,10 +70,9 @@ export function Settings() {
     }
   };
   return (
-    <>
-      <div className="page-heading">
+    <div className="settings-page">
+      <div className="page-heading settings-heading">
         <div>
-          <p className="eyebrow">Personalize</p>
           <h1>Settings</h1>
           <p>Manage your account, appearance, and app preferences.</p>
         </div>
@@ -121,6 +120,7 @@ export function Settings() {
       </div>
       <div className="settings-plan">
         <span>
+          <Sparkles size={14} aria-hidden="true" />
           {data.isPremium ? "Premium preview" : "Free plan"} · local demo only
         </span>
         <button onClick={premium}>Manage plan</button>
@@ -200,12 +200,13 @@ export function Settings() {
               disabled={busy || saving}
               onClick={() => void save()}
             >
+              <Save size={14} aria-hidden="true" />
               {saving ? "Saving…" : "Save Changes"}
             </button>
           </div>
           {error && <p className="error">{error}</p>}
         </div>
       )}
-    </>
+    </div>
   );
 }

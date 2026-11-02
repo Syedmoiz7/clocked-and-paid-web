@@ -37,6 +37,15 @@ export function Appearance({
           </button>
         ))}
       </div>
+      <p className="settings-theme-caption">
+        Current:{" "}
+        <strong>
+          {themeOptions.find(
+            (option) => option.hue === data.preferences.themeHue,
+          )?.label ?? "Custom"}
+        </strong>{" "}
+        · Saved automatically.
+      </p>
     </Panel>
   );
 }
@@ -79,13 +88,38 @@ export function PayPreview({
       ) : (
         <div className="settings-pay-preview">
           {rows.map((row) => (
-            <div key={row.id}>
+            <div key={row.id} className="settings-preview-row">
               <h3>{row.name}</h3>
-              <p>
-                {data.payVisible
-                  ? `Regular / hr: ${money(row.rate, row.currency)} · OT / hr: ${money(row.rate * row.multiplier, row.currency)} · ${hours}hr gross: ${money(Math.min(hours, row.threshold) * row.rate + Math.max(0, hours - row.threshold) * row.rate * row.multiplier, row.currency)}`
-                  : "••••• · pay is hidden"}
-              </p>
+              <dl className="settings-preview-metrics">
+                <div>
+                  <dt>Regular / hr</dt>
+                  <dd>
+                    {data.payVisible ? money(row.rate, row.currency) : "•••••"}
+                  </dd>
+                </div>
+                <div>
+                  <dt>OT / hr</dt>
+                  <dd>
+                    {data.payVisible
+                      ? money(row.rate * row.multiplier, row.currency)
+                      : "•••••"}
+                  </dd>
+                </div>
+                <div>
+                  <dt>{hours}hr gross</dt>
+                  <dd>
+                    {data.payVisible
+                      ? money(
+                          Math.min(hours, row.threshold) * row.rate +
+                            Math.max(0, hours - row.threshold) *
+                              row.rate *
+                              row.multiplier,
+                          row.currency,
+                        )
+                      : "•••••"}
+                  </dd>
+                </div>
+              </dl>
             </div>
           ))}
         </div>

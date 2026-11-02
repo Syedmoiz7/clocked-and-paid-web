@@ -8,6 +8,7 @@ import { ReminderEditor } from "@/features/jobs/components/ReminderEditor";
 import { Confirm } from "@/features/pay/components/Shared";
 import type { CustomReminder } from "@/types";
 import { useState } from "react";
+import { PreferenceSegments } from "./PreferenceSegments";
 
 export function PreferenceCards({
   draft,
@@ -59,7 +60,7 @@ export function PreferenceCards({
       >
         <fieldset className="form-stack" disabled={disabled}>
           <div className="chips" aria-label="Typical hours">
-            {[6, 8, 10, 12].map((value) => (
+            {[6, 7, 8, 9, 10, 12].map((value) => (
               <button
                 type="button"
                 key={value}
@@ -218,51 +219,50 @@ export function PreferenceCards({
             checked={prefs.payHiddenByDefault}
             onChange={(payHiddenByDefault) => update({ payHiddenByDefault })}
           />
-          <label className="field">
-            <span>Clock Format</span>
-            <select
-              value={prefs.clockFormat}
-              onChange={(event) =>
-                update({
-                  clockFormat: event.target.value as typeof prefs.clockFormat,
-                })
-              }
-            >
-              <option value="12h">12-Hour · 9:30 AM</option>
-              <option value="24h">24-Hour · 09:30</option>
-            </select>
-          </label>
-          <label className="field">
-            <span>Shift Timer Direction</span>
-            <select
-              value={plan.timerDirection}
-              onChange={(event) =>
-                updatePlan({
-                  timerDirection: event.target
-                    .value as typeof plan.timerDirection,
-                })
-              }
-            >
-              <option value="count-up">Count Up</option>
-              <option value="count-down">Count Down</option>
-            </select>
-          </label>
-          <label className="field">
-            <span>Browser Tab Time</span>
-            <select
-              value={prefs.headerTimerMode}
-              onChange={(event) =>
-                update({
-                  headerTimerMode: event.target
-                    .value as typeof prefs.headerTimerMode,
-                })
-              }
-            >
-              <option value="count-up">Count Up</option>
-              <option value="count-down">Count Down</option>
-              <option value="off">Off</option>
-            </select>
-          </label>
+          <PreferenceSegments
+            label="Clock Format"
+            value={prefs.clockFormat}
+            onChange={(clockFormat) => update({ clockFormat })}
+            options={[
+              { value: "12h", label: "12-Hour", description: "9:30 AM" },
+              { value: "24h", label: "24-Hour", description: "09:30" },
+            ]}
+          />
+          <PreferenceSegments
+            label="Browser Tab Time"
+            value={prefs.headerTimerMode}
+            onChange={(headerTimerMode) => update({ headerTimerMode })}
+            options={[
+              {
+                value: "count-up",
+                label: "Count Up",
+                description: "Time worked",
+              },
+              {
+                value: "count-down",
+                label: "Count Down",
+                description: "Time remaining",
+              },
+              { value: "off", label: "Off", description: "Standard title" },
+            ]}
+          />
+          <PreferenceSegments
+            label="Shift Timer Direction"
+            value={plan.timerDirection}
+            onChange={(timerDirection) => updatePlan({ timerDirection })}
+            options={[
+              {
+                value: "count-up",
+                label: "Count Up",
+                description: "Time worked",
+              },
+              {
+                value: "count-down",
+                label: "Count Down",
+                description: "Time remaining",
+              },
+            ]}
+          />
         </fieldset>
       </Panel>
       {editing && (
